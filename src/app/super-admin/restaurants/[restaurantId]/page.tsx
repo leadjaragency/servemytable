@@ -50,7 +50,9 @@ export default async function RestaurantDetailPage({ params }: Params) {
   // Serialise dates for client props
   const serialised = {
     ...restaurant,
-    createdAt: restaurant.createdAt.toISOString(),
+    createdAt:      restaurant.createdAt.toISOString(),
+    trialStartsAt:  restaurant.trialStartsAt?.toISOString() ?? null,
+    trialEndsAt:    restaurant.trialEndsAt?.toISOString()   ?? null,
     avgRating,
     users: restaurant.users.map((u) => ({
       ...u,

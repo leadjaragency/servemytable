@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft, Star, UtensilsCrossed, Users, LayoutGrid,
   ShoppingBag, AlertTriangle, ExternalLink,
-  Trash2, Globe, AlertCircle,
+  Trash2, Globe, AlertCircle, Clock, CheckCircle2, CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { RestaurantStatusBadge, TierBadge } from "@/components/ui/StatusBadge";
@@ -30,6 +30,8 @@ export interface RestaurantDetail {
   currency: string;
   status: string;
   createdAt: string;
+  trialStartsAt: string | null;
+  trialEndsAt: string | null;
   tier: {
     id: string;
     name: string;
@@ -174,6 +176,325 @@ function ChangeTierModal({
 }
 
 // ---------------------------------------------------------------------------
+// Extend Trial Modal
+// ---------------------------------------------------------------------------
+
+const EXTEND_OPTIONS = [
+  { label: "+7 days",  days: 7  },
+  { label: "+14 days", days: 14 },
+  { label: "+30 days", days: 30 },
+] as const;
+
+function ExtendTrialModal({
+  restaurantId,
+  isNewTrial = false,
+  onClose,
+}: {
+  restaurantId: string;
+  isNewTrial?: boolean;
+  onClose: () => void;
+}) {
+  const router = useRouter();
+  const [selected, setSelected] = useState<number>(14);
+  const [customDate, setCustomDate]   = useState("");
+  const [useCustom, setUseCustom]     = useState(false);
+  const [loading, setLoading]         = useState(false);
+  const [error, setError]             = useState<string | null>(null);
+
+  async function save() {
+    setError(null);
+
+    let trialEndsAt: string;
+    if (useCustom) {
+      if (!customDate) { setError("Please select a date."); return; }
+      trialEndsAt = new Date(customDate).toISOString();
+    } else {
+      const d = new Date();
+      d.setDate(d.getDate() + selected);
+      trialEndsAt = d.toISOString();
+    }
+
+    setLoading(true);
+    const res = await fetch(`/api/super-admin/restaurants/${restaurantId}`, {
+      method:  "PUT",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ trialEndsAt }),
+    });
+    setLoading(false);
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      setError((body as { error?: string }).error ?? "Failed to extend trial.");
+      return;
+    }
+    onClose();
+    router.refresh();
+  }
+
+  // Compute preview label
+  const previewDate = (() => {
+    if (useCustom) return customDate ? new Date(customDate).toLocaleDateString() : "—";
+    const d = new Date();
+    d.setDate(d.getDate() + selected);
+    return d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" });
+  })();
+
+  return (
+    <Modal
+      open
+      onOpenChange={(o) => !o && onClose()}
+      title={isNewTrial ? "Start Trial Period" : "Extend Trial Period"}
+      contentClassName="bg-sa-surface border-sa-border text-sa-text"
+    >
+      <div className="space-y-4">
+        <p className="text-sm text-sa-muted">
+          {isNewTrial
+            ? "Set a trial period for this restaurant starting from today."
+            : "New expiry is calculated from today, so even expired accounts get a clean window."}
+        </p>
+
+        {/* Preset options */}
+        <div className="grid grid-cols-3 gap-2">
+          {EXTEND_OPTIONS.map(({ label, days }) => (
+            <button
+              key={days}
+              onClick={() => { setSelected(days); setUseCustom(false); }}
+              className={`rounded-xl border py-3 text-sm font-medium transition-all ${
+                !useCustom && selected === days
+                  ? "border-sa-accent bg-sa-accent/10 text-sa-accent"
+                  : "border-sa-border text-sa-muted hover:border-sa-accent/40 hover:text-sa-text"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Custom date */}
+        <div>
+          <label className="flex items-center gap-2 cursor-pointer text-sm text-sa-muted mb-2">
+            <input
+              type="checkbox"
+              checked={useCustom}
+              onChange={(e) => setUseCustom(e.target.checked)}
+              className="accent-amber-500"
+            />
+            Set a specific end date
+          </label>
+          {useCustom && (
+            <input
+              type="date"
+              value={customDate}
+              min={new Date().toISOString().split("T")[0]}
+              onChange={(e) => setCustomDate(e.target.value)}
+              className="w-full rounded-lg border border-sa-border bg-sa-bg px-3 py-2 text-sm text-sa-text focus:outline-none focus:ring-2 focus:ring-sa-accent/30"
+            />
+          )}
+        </div>
+
+        {/* Preview */}
+        <div className="rounded-xl border border-sa-border bg-sa-bg px-4 py-3 flex items-center justify-between text-sm">
+          <span className="text-sa-muted">New trial expires on</span>
+          <span className="font-semibold text-sa-accent">{previewDate}</span>
+        </div>
+
+        {error && (
+          <div className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            {error}
+          </div>
+        )}
+      </div>
+
+      <ModalFooter className="border-t border-sa-border">
+        <Button variant="ghost" onClick={onClose} className="text-sa-muted">Cancel</Button>
+        <Button variant="primary" loading={loading} onClick={save}>Extend trial</Button>
+      </ModalFooter>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Activate Paid Subscription Modal
+// ---------------------------------------------------------------------------
+
+function ActivatePaidModal({
+  restaurantId,
+  tierName,
+  onClose,
+}: {
+  restaurantId: string;
+  tierName: string | null;
+  onClose: () => void;
+}) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+
+  async function activate() {
+    setError(null);
+    setLoading(true);
+    const res = await fetch(`/api/super-admin/restaurants/${restaurantId}`, {
+      method:  "PUT",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ trialEndsAt: null }),
+    });
+    setLoading(false);
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      setError((body as { error?: string }).error ?? "Failed to activate subscription.");
+      return;
+    }
+    onClose();
+    router.refresh();
+  }
+
+  return (
+    <Modal
+      open
+      onOpenChange={(o) => !o && onClose()}
+      title="Activate Paid Subscription"
+      contentClassName="bg-sa-surface border-sa-border text-sa-text"
+    >
+      <div className="space-y-4">
+        <div className="flex items-start gap-3 rounded-xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-400">
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="space-y-1">
+            <p className="font-semibold text-green-300">This removes the trial expiry permanently.</p>
+            <p>
+              The restaurant will have <strong>unlimited access</strong> under their{" "}
+              <strong>{tierName ?? "assigned"}</strong> plan with no expiry date.
+            </p>
+          </div>
+        </div>
+
+        <p className="text-sm text-sa-muted">
+          The restaurant owner will regain full access immediately. Make sure you have confirmed payment before activating.
+        </p>
+
+        {error && (
+          <div className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            {error}
+          </div>
+        )}
+      </div>
+
+      <ModalFooter className="border-t border-sa-border">
+        <Button variant="ghost" onClick={onClose} className="text-sa-muted">Cancel</Button>
+        <Button
+          variant="primary"
+          loading={loading}
+          onClick={activate}
+          leftIcon={<CreditCard className="h-4 w-4" />}
+        >
+          Activate subscription
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Subscription Card
+// ---------------------------------------------------------------------------
+
+function SubscriptionCard({
+  restaurant,
+  onExtend,
+  onActivate,
+}: {
+  restaurant: RestaurantDetail;
+  onExtend: () => void;
+  onActivate: () => void;
+}) {
+  const { trialStartsAt, trialEndsAt, tier } = restaurant;
+  const now = new Date();
+
+  const isPaid    = trialStartsAt !== null && trialEndsAt === null;
+  const isExpired = trialEndsAt !== null && new Date(trialEndsAt) < now;
+  const isActive  = trialEndsAt !== null && new Date(trialEndsAt) >= now;
+  const noTrial   = trialStartsAt === null; // never approved / no trial started
+
+  const daysLeft = trialEndsAt
+    ? Math.max(0, Math.ceil((new Date(trialEndsAt).getTime() - now.getTime()) / 86_400_000))
+    : null;
+
+  return (
+    <div className="rounded-2xl border border-sa-border bg-sa-surface p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="font-display text-base font-semibold text-sa-text">Subscription &amp; Trial</h2>
+        {isPaid && (
+          <span className="flex items-center gap-1 rounded-full bg-green-500/15 px-2.5 py-1 text-[11px] font-semibold text-green-400">
+            <CheckCircle2 className="h-3 w-3" /> Paid
+          </span>
+        )}
+        {isExpired && (
+          <span className="flex items-center gap-1 rounded-full bg-red-500/15 px-2.5 py-1 text-[11px] font-semibold text-red-400">
+            <Clock className="h-3 w-3" /> Expired
+          </span>
+        )}
+        {isActive && (
+          <span className="flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold text-amber-400">
+            <Clock className="h-3 w-3" /> Trial Active
+          </span>
+        )}
+        {noTrial && (
+          <span className="rounded-full bg-sa-border px-2.5 py-1 text-[11px] text-sa-muted">
+            No trial
+          </span>
+        )}
+      </div>
+
+      <dl className="space-y-2.5 text-sm">
+        <div className="flex justify-between gap-4">
+          <dt className="text-sa-muted shrink-0">Plan</dt>
+          <dd className="text-sa-text text-right">
+            {tier ? `${tier.name} — $${tier.monthlyPrice}/mo` : "No tier assigned"}
+          </dd>
+        </div>
+        {trialStartsAt && (
+          <div className="flex justify-between gap-4">
+            <dt className="text-sa-muted shrink-0">Trial started</dt>
+            <dd className="text-sa-text">{formatDate(trialStartsAt)}</dd>
+          </div>
+        )}
+        {isPaid ? (
+          <div className="flex justify-between gap-4">
+            <dt className="text-sa-muted shrink-0">Expires</dt>
+            <dd className="text-green-400 font-medium">Never (paid)</dd>
+          </div>
+        ) : trialEndsAt ? (
+          <div className="flex justify-between gap-4">
+            <dt className="text-sa-muted shrink-0">Trial ends</dt>
+            <dd className={isExpired ? "text-red-400 font-medium" : "text-sa-text"}>
+              {formatDate(trialEndsAt)}
+              {isActive && daysLeft !== null && (
+                <span className="ml-1.5 text-amber-400">({daysLeft}d left)</span>
+              )}
+              {isExpired && <span className="ml-1.5 text-red-400/70">(expired)</span>}
+            </dd>
+          </div>
+        ) : null}
+      </dl>
+
+      {/* Actions — always shown so super admin can start/extend trial or activate paid for any restaurant */}
+      <div className="flex gap-2 pt-1 border-t border-sa-border">
+        <Button size="sm" variant="outline" onClick={onExtend} leftIcon={<Clock className="h-3.5 w-3.5" />}>
+          {noTrial ? "Start trial" : "Extend trial"}
+        </Button>
+        {!isPaid && (
+          <Button size="sm" variant="primary" onClick={onActivate} leftIcon={<CreditCard className="h-3.5 w-3.5" />}>
+            Activate paid
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Permanent Delete Confirmation Modal
 // ---------------------------------------------------------------------------
 
@@ -279,9 +600,15 @@ export function RestaurantDetailView({
   tiers: Tier[];
 }) {
   const router = useRouter();
-  const [tierModalOpen, setTierModal]     = useState(false);
-  const [deleteModalOpen, setDeleteModal] = useState(false);
-  const [statusLoading, setStatusLoading] = useState(false);
+  const [tierModalOpen, setTierModal]       = useState(false);
+  const [deleteModalOpen, setDeleteModal]   = useState(false);
+  const [extendModalOpen, setExtendModal]   = useState(false);
+  const [activateModalOpen, setActivateModal] = useState(false);
+  const [statusLoading, setStatusLoading]   = useState(false);
+
+  const trialExpired =
+    restaurant.trialEndsAt !== null && new Date(restaurant.trialEndsAt) < new Date();
+  const trialNeedsAction = trialExpired || restaurant.trialStartsAt === null;
 
   async function toggleStatus() {
     const nextStatus =
@@ -334,6 +661,11 @@ export function RestaurantDetailView({
 
         {/* Action buttons */}
         <div className="flex flex-wrap items-center gap-2 shrink-0">
+          {trialExpired && (
+            <span className="flex items-center gap-1 rounded-full bg-red-500/15 px-2.5 py-1 text-xs font-semibold text-red-400">
+              <Clock className="h-3 w-3" /> Trial Expired
+            </span>
+          )}
           <a
             href={`/table/1?restaurant=${restaurant.slug}`}
             target="_blank"
@@ -351,6 +683,16 @@ export function RestaurantDetailView({
           >
             Change Tier
           </Button>
+          {trialExpired && (
+            <Button
+              size="sm"
+              variant="primary"
+              leftIcon={<Clock className="h-3.5 w-3.5" />}
+              onClick={() => setExtendModal(true)}
+            >
+              Reactivate
+            </Button>
+          )}
           {(isActive || isSuspended) && (
             <Button
               size="sm"
@@ -387,6 +729,13 @@ export function RestaurantDetailView({
 
       {/* Two-column layout */}
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Subscription card */}
+        <SubscriptionCard
+          restaurant={restaurant}
+          onExtend={() => setExtendModal(true)}
+          onActivate={() => setActivateModal(true)}
+        />
+
         {/* Profile info */}
         <div className="rounded-2xl border border-sa-border bg-sa-surface p-6 space-y-4">
           <h2 className="font-display text-base font-semibold text-sa-text">Profile</h2>
@@ -469,6 +818,20 @@ export function RestaurantDetailView({
           currentTierId={restaurant.tier?.id ?? null}
           tiers={tiers}
           onClose={() => setTierModal(false)}
+        />
+      )}
+      {extendModalOpen && (
+        <ExtendTrialModal
+          restaurantId={restaurant.id}
+          isNewTrial={restaurant.trialStartsAt === null}
+          onClose={() => setExtendModal(false)}
+        />
+      )}
+      {activateModalOpen && (
+        <ActivatePaidModal
+          restaurantId={restaurant.id}
+          tierName={restaurant.tier?.name ?? null}
+          onClose={() => setActivateModal(false)}
         />
       )}
       {deleteModalOpen && (

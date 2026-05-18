@@ -6,21 +6,23 @@ import { z } from "zod";
 
 
 import { prisma } from "@/lib/db";
+import { getSupabaseAdmin } from "@/lib/supabase-server";
 
 // ---------------------------------------------------------------------------
 // Schema
 // ---------------------------------------------------------------------------
 
 const updateSchema = z.object({
-  status:  z.enum(["active", "pending", "suspended", "disabled"]).optional(),
-  tierId:  z.string().cuid().optional(),
-  name:    z.string().min(2).max(100).optional(),
-  cuisine: z.string().min(2).max(100).optional(),
-  tagline: z.string().max(255).optional(),
-  phone:   z.string().optional(),
-  address: z.string().optional(),
-  email:   z.string().email().optional(),
-  taxRate: z.number().min(0).max(1).optional(),
+  status:      z.enum(["active", "pending", "suspended", "disabled"]).optional(),
+  tierId:      z.string().cuid().optional(),
+  name:        z.string().min(2).max(100).optional(),
+  cuisine:     z.string().min(2).max(100).optional(),
+  tagline:     z.string().max(255).optional(),
+  phone:       z.string().optional(),
+  address:     z.string().optional(),
+  email:       z.string().email().optional(),
+  taxRate:     z.number().min(0).max(1).optional(),
+  trialEndsAt: z.string().datetime().nullable().optional(),
 });
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -99,15 +101,31 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
       );
     }
 
-    const { status, tierId, ...rest } = parsed.data;
+    const { status, tierId, trialEndsAt, ...rest } = parsed.data;
+
+    // Fetch restaurant users before transaction (needed for Supabase sync)
+    const restaurant = await prisma.restaurant.findUnique({
+      where: { id },
+      include: {
+        users: {
+          where: { supabaseUserId: { not: null } },
+          select: { supabaseUserId: true, role: true },
+        },
+      },
+    });
+
+    if (!restaurant) {
+      return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+    }
 
     await prisma.$transaction(async (tx) => {
       await tx.restaurant.update({
         where: { id },
         data: {
           ...rest,
-          ...(status ? { status } : {}),
-          ...(tierId ? { tierId } : {}),
+          ...(status !== undefined ? { status } : {}),
+          ...(tierId !== undefined ? { tierId } : {}),
+          ...(trialEndsAt !== undefined ? { trialEndsAt: trialEndsAt ? new Date(trialEndsAt) : null } : {}),
         },
       });
 
@@ -124,6 +142,22 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
         });
       }
     });
+
+    // Sync trialEndsAt to Supabase user metadata for all restaurant users
+    if (trialEndsAt !== undefined) {
+      const supabaseAdmin = getSupabaseAdmin();
+      await Promise.all(
+        restaurant.users
+          .filter((u) => u.supabaseUserId)
+          .map((u) =>
+            supabaseAdmin.auth.admin.updateUserById(u.supabaseUserId!, {
+              user_metadata: {
+                trialEndsAt: trialEndsAt ?? null,
+              },
+            })
+          )
+      );
+    }
 
     return NextResponse.json({ message: "Updated successfully" });
   } catch (error) {
