@@ -2,7 +2,7 @@ import { getRequiredSession, getPrismaForSession, getRestaurantFromSlug } from "
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getPrismaClient } from "@/lib/db";
-import type { Country } from "@/types";
+import type { Country, AppSession } from "@/types";
 
 
 export const dynamic = "force-dynamic";
@@ -90,8 +90,11 @@ const CreateOrderSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    // Support both admin session and public (customer) access via sessionId
-    const session      = await getRequiredSession();
+    // Support both admin session and public (customer) access via restaurantSlug.
+    // getRequiredSession throws for unauthenticated users, so we catch and allow null.
+    let session: AppSession | null = null;
+    try { session = await getRequiredSession(); } catch { /* customer — no auth */ }
+
     const body         = await req.json();
     const parsed       = CreateOrderSchema.safeParse(body);
     if (!parsed.success) {
