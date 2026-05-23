@@ -8,6 +8,17 @@ import { Toaster } from "sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { isValidLocale } from "@/lib/admin-locale";
+import enMessages from "../../../messages/en.json";
+import deMessages from "../../../messages/de.json";
+import frMessages from "../../../messages/fr.json";
+import esMessages from "../../../messages/es.json";
+
+const adminMessageMap: Record<string, object> = {
+  en: enMessages,
+  de: deMessages,
+  fr: frMessages,
+  es: esMessages,
+};
 
 export default async function AdminLayout({
   children,
@@ -58,7 +69,7 @@ export default async function AdminLayout({
   const restaurantLocale = isValidLocale(restaurant.defaultLanguage)
     ? restaurant.defaultLanguage
     : "en";
-  const adminMessages = (await import(`../../../messages/${restaurantLocale}.json`)).default;
+  const adminMessages = adminMessageMap[restaurantLocale] ?? adminMessageMap.en;
   const t = await getTranslations({ locale: restaurantLocale, namespace: "admin.layout" });
 
   // ── Recent pending orders for notification bell ────────────────────────
