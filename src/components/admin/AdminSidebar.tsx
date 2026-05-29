@@ -146,38 +146,45 @@ function RestaurantDropdown({
 
   return (
     <DropdownMenu.Root>
-      <div className={`flex items-center border-b border-ra-border py-4 ${collapsed ? "justify-center px-3" : "gap-3 px-5"}`}>
-        <DropdownMenu.Trigger asChild>
-          <button
-            title="Restaurant options"
-            className="flex items-center gap-3 rounded-lg hover:opacity-80 transition-opacity focus:outline-none"
-          >
-            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-ra-accent text-lg font-bold text-ra-bg overflow-hidden">
-              {restaurantLogoUrl ? (
-                <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-cover" unoptimized />
-              ) : (
-                restaurantName.charAt(0)
-              )}
-            </div>
-            {!collapsed && (
-              <div className="min-w-0 text-left">
-                <p className="truncate text-sm font-semibold text-ra-text leading-tight">
-                  {restaurantName}
-                </p>
-                <p className="text-xs text-ra-muted leading-tight">{tLayout("adminPortal")}</p>
+      <div className={`border-b border-ra-border ${collapsed ? "flex justify-center px-3 py-4" : "px-5 pt-5 pb-4"}`}>
+        {collapsed ? (
+          /* Icon-only (tablet) — single centered logo */
+          <DropdownMenu.Trigger asChild>
+            <button title={restaurantName} className="rounded-xl hover:opacity-80 transition-opacity focus:outline-none">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-ra-accent text-base font-bold text-ra-bg overflow-hidden">
+                {restaurantLogoUrl
+                  ? <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-cover" unoptimized />
+                  : restaurantName.charAt(0)}
               </div>
-            )}
-          </button>
-        </DropdownMenu.Trigger>
+            </button>
+          </DropdownMenu.Trigger>
+        ) : (
+          /* Full sidebar — logo stacked above name */
+          <div className="flex items-start justify-between">
+            <DropdownMenu.Trigger asChild>
+              <button title="Restaurant options" className="flex flex-col items-start gap-2.5 rounded-lg hover:opacity-80 transition-opacity focus:outline-none">
+                <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-ra-accent text-xl font-bold text-ra-bg overflow-hidden">
+                  {restaurantLogoUrl
+                    ? <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-cover" unoptimized />
+                    : restaurantName.charAt(0)}
+                </div>
+                <div className="min-w-0 text-left">
+                  <p className="truncate text-sm font-semibold text-ra-text leading-tight">{restaurantName}</p>
+                  <p className="text-xs text-ra-muted leading-tight">{tLayout("adminPortal")}</p>
+                </div>
+              </button>
+            </DropdownMenu.Trigger>
 
-        {/* Mobile close button */}
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="ml-auto flex h-7 w-7 items-center justify-center rounded-lg text-ra-muted hover:bg-white/5 hover:text-ra-text"
-          >
-            <X className="h-4 w-4" />
-          </button>
+            {/* Mobile close button */}
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-ra-muted hover:bg-white/5 hover:text-ra-text"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
         )}
       </div>
 
