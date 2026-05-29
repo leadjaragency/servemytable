@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Save, Loader2, AlertTriangle } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Save, Loader2, AlertTriangle, Upload, X, ImageIcon } from "lucide-react";
+import Image from "next/image";
 
 interface RestaurantProfile {
   id:       string;
@@ -14,14 +15,19 @@ interface RestaurantProfile {
   taxRate:  number;
   hours:    { open: string; close: string } | null;
   currency: string;
+  logoUrl:  string | null;
 }
 
 export default function AdminSettingsPage() {
-  const [profile,    setProfile]    = useState<RestaurantProfile | null>(null);
-  const [loading,    setLoading]    = useState(true);
-  const [saving,     setSaving]     = useState(false);
-  const [success,    setSuccess]    = useState(false);
-  const [error,      setError]      = useState<string | null>(null);
+  const [profile,      setProfile]      = useState<RestaurantProfile | null>(null);
+  const [loading,      setLoading]      = useState(true);
+  const [saving,       setSaving]       = useState(false);
+  const [success,      setSuccess]      = useState(false);
+  const [error,        setError]        = useState<string | null>(null);
+  const [logoUrl,      setLogoUrl]      = useState<string | null>(null);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [logoError,    setLogoError]    = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name,       setName]       = useState("");
   const [cuisine,    setCuisine]    = useState("");
@@ -46,6 +52,7 @@ export default function AdminSettingsPage() {
         setPhone(r.phone ?? "");
         setEmail(r.email ?? "");
         setAddress(r.address ?? "");
+        setLogoUrl(r.logoUrl ?? null);
         setTaxRate(String(Math.round((r.taxRate ?? 0.08) * 100)));
         const h = r.hours as { open?: string; close?: string } | null;
         setHoursOpen(h?.open ?? "11:00");
@@ -56,6 +63,40 @@ export default function AdminSettingsPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLogoError(null);
+    setLogoUploading(true);
+    try {
+      const form = new FormData();
+      form.append("logo", file);
+      const res  = await fetch("/api/restaurant/logo", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Upload failed");
+      setLogoUrl(data.logoUrl);
+    } catch (err) {
+      setLogoError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setLogoUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
+  async function handleLogoRemove() {
+    setLogoError(null);
+    setLogoUploading(true);
+    try {
+      const res = await fetch("/api/restaurant/logo", { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to remove logo");
+      setLogoUrl(null);
+    } catch (err) {
+      setLogoError(err instanceof Error ? err.message : "Remove failed");
+    } finally {
+      setLogoUploading(false);
+    }
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -105,6 +146,61 @@ export default function AdminSettingsPage() {
       {/* Profile */}
       <section className="rounded-2xl border border-ra-border bg-ra-surface p-6 space-y-5">
         <h2 className="font-display text-base font-semibold text-ra-text">Restaurant Profile</h2>
+
+        {/* Logo upload */}
+        <div>
+          <label className="block text-xs font-medium text-ra-muted mb-2">Restaurant Logo</label>
+          <div className="flex items-center gap-4">
+            {/* Preview */}
+            <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-ra-border bg-ra-bg flex items-center justify-center">
+              {logoUrl ? (
+                <Image src={logoUrl} alt="Restaurant logo" fill className="object-contain p-1" unoptimized />
+              ) : (
+                <ImageIcon className="h-8 w-8 text-ra-muted/40" />
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                className="hidden"
+                onChange={handleLogoUpload}
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={logoUploading}
+                className="flex items-center gap-1.5 rounded-lg border border-ra-border bg-ra-bg px-3 py-1.5 text-xs font-medium text-ra-text hover:bg-ra-border/30 disabled:opacity-40 transition-colors"
+              >
+                {logoUploading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Upload className="h-3.5 w-3.5" />
+                )}
+                {logoUploading ? "Uploading…" : logoUrl ? "Replace Logo" : "Upload Logo"}
+              </button>
+              {logoUrl && (
+                <button
+                  type="button"
+                  onClick={handleLogoRemove}
+                  disabled={logoUploading}
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/10 disabled:opacity-40 transition-colors"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  Remove
+                </button>
+              )}
+              <p className="text-[11px] text-ra-muted">JPG, PNG, WebP or SVG · max 2 MB</p>
+            </div>
+          </div>
+          {logoError && (
+            <p className="mt-2 text-xs text-red-400">{logoError}</p>
+          )}
+        </div>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-xs font-medium text-ra-muted mb-1.5">Restaurant Name</label>
