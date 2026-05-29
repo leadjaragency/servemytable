@@ -42,7 +42,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ logoUrl });
   } catch (err) {
     console.error("[POST /api/restaurant/logo]", err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    const msg = err instanceof Error ? err.message : String(err);
+    // Surface Supabase storage errors (e.g. bucket not found) directly to the client
+    return NextResponse.json({ error: msg || "Upload failed" }, { status: 500 });
   }
 }
 
