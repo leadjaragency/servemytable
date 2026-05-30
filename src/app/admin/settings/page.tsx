@@ -154,7 +154,7 @@ export default function AdminSettingsPage() {
             {/* Preview */}
             <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-ra-border bg-ra-bg flex items-center justify-center">
               {logoUrl ? (
-                <Image src={logoUrl} alt="Restaurant logo" fill className="object-contain p-1" unoptimized />
+                <Image src={logoUrl} alt="Restaurant logo" fill className="object-contain p-1" />
               ) : (
                 <ImageIcon className="h-8 w-8 text-ra-muted/40" />
               )}

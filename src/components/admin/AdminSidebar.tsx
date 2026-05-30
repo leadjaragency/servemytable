@@ -153,7 +153,7 @@ function RestaurantDropdown({
             <button title={restaurantName} className="rounded-xl hover:opacity-80 transition-opacity focus:outline-none">
               <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-ra-accent text-base font-bold text-ra-bg overflow-hidden">
                 {restaurantLogoUrl
-                  ? <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-cover" unoptimized />
+                  ? <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-contain p-1" />
                   : restaurantName.charAt(0)}
               </div>
             </button>
@@ -165,7 +165,7 @@ function RestaurantDropdown({
               <button title="Restaurant options" className="flex flex-col items-start gap-2.5 rounded-lg hover:opacity-80 transition-opacity focus:outline-none">
                 <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-ra-accent text-xl font-bold text-ra-bg overflow-hidden">
                   {restaurantLogoUrl
-                    ? <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-cover" unoptimized />
+                    ? <Image src={restaurantLogoUrl} alt={restaurantName} fill className="object-contain p-1" />
                     : restaurantName.charAt(0)}
                 </div>
                 <div className="min-w-0 text-left">
