@@ -49,6 +49,7 @@ export default async function AdminLayout({
       status: true,
       defaultLanguage: true,
       logoUrl: true,
+      isPublicDemo: true,
       _count: {
         select: {
           orders: { where: { status: { in: ["received", "preparing"] } } },
@@ -112,6 +113,7 @@ export default async function AdminLayout({
         userRole={role}
         userName={userName ?? "User"}
         userEmail={userEmail ?? ""}
+        isPublicDemo={restaurant.isPublicDemo}
       />
 
       {/* Main content — offset for sidebar at each breakpoint */}

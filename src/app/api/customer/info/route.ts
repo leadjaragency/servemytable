@@ -113,13 +113,17 @@ export async function GET(req: Request) {
     }
 
     // ── Session lock check (against effective / primary table) ───────────
-    const sessionId = searchParams.get("sessionId")?.trim() ?? null;
-    const activeSession = await db.tableSession.findFirst({
-      where: { tableId: effectiveTable.id, endedAt: null },
-      select: { id: true },
-    });
-    if (activeSession && sessionId !== activeSession.id) {
-      return NextResponse.json({ error: "table_occupied" }, { status: 409 });
+    // Skipped for the public demo restaurant so any number of prospects can
+    // open the customer experience at once — each gets their own session.
+    if (!restaurant.isPublicDemo) {
+      const sessionId = searchParams.get("sessionId")?.trim() ?? null;
+      const activeSession = await db.tableSession.findFirst({
+        where: { tableId: effectiveTable.id, endedAt: null },
+        select: { id: true },
+      });
+      if (activeSession && sessionId !== activeSession.id) {
+        return NextResponse.json({ error: "table_occupied" }, { status: 409 });
+      }
     }
 
     // Strip internal status from restaurant before sending

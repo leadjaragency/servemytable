@@ -93,10 +93,14 @@ export async function POST(req: Request) {
     }
 
     // ── Guard: if primary already has an active session, join it ─────────
-    const existing = await db.tableSession.findFirst({
-      where:  { tableId: effectiveTableId, endedAt: null },
-      select: { id: true },
-    });
+    // Demo restaurant is exempt: each visitor gets their own private session
+    // so multiple prospects can try the customer experience independently.
+    const existing = restaurant.isPublicDemo
+      ? null
+      : await db.tableSession.findFirst({
+          where:  { tableId: effectiveTableId, endedAt: null },
+          select: { id: true },
+        });
     if (existing) {
       // For merged tables: multiple people scanning join the same session
       return NextResponse.json({

@@ -21,6 +21,7 @@ import {
   Users,
   Settings,
   LogOut,
+  DoorOpen,
   Menu,
   X,
   BarChart2,
@@ -66,6 +67,7 @@ interface AdminSidebarProps {
   userRole: string;
   userName: string;
   userEmail: string;
+  isPublicDemo: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -236,12 +238,14 @@ function UserFooter({
   userRole,
   collapsed,
   onSignOut,
+  isPublicDemo,
 }: {
   userName: string;
   userEmail: string;
   userRole: string;
   collapsed: boolean;
   onSignOut: () => void;
+  isPublicDemo: boolean;
 }) {
   const tLayout = useTranslations("admin.layout");
   const roleLabel = userRole.replace("restaurant_", "");
@@ -249,26 +253,46 @@ function UserFooter({
   if (collapsed) {
     return (
       <div className="border-t border-ra-border p-3 flex justify-center">
-        <button
-          onClick={onSignOut}
-          title="Sign out"
-          className="flex h-9 w-9 items-center justify-center rounded-xl text-red-400 hover:bg-red-500/10 transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-        </button>
+        {isPublicDemo ? (
+          <button
+            onClick={onSignOut}
+            title="Exit demo"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-ra-muted hover:bg-white/10 transition-colors"
+          >
+            <DoorOpen className="h-4 w-4" />
+          </button>
+        ) : (
+          <button
+            onClick={onSignOut}
+            title="Sign out"
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-red-400 hover:bg-red-500/10 transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        )}
       </div>
     );
   }
 
   return (
     <div className="border-t border-ra-border p-3">
-      <button
-        onClick={onSignOut}
-        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
-      >
-        <LogOut className="h-4 w-4" />
-        {tLayout("signOut")}
-      </button>
+      {isPublicDemo ? (
+        <button
+          onClick={onSignOut}
+          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-ra-text hover:bg-white/10 transition-colors"
+        >
+          <DoorOpen className="h-4 w-4" />
+          Exit Demo
+        </button>
+      ) : (
+        <button
+          onClick={onSignOut}
+          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+        >
+          <LogOut className="h-4 w-4" />
+          {tLayout("signOut")}
+        </button>
+      )}
     </div>
   );
 }
@@ -287,6 +311,7 @@ function SidebarContent({
   collapsed,
   onClose,
   onSignOut,
+  isPublicDemo,
 }: {
   restaurantName: string;
   restaurantLogoUrl: string | null;
@@ -297,6 +322,7 @@ function SidebarContent({
   collapsed: boolean;
   onClose?: () => void;
   onSignOut: () => void;
+  isPublicDemo: boolean;
 }) {
   const pathname = usePathname();
   const t = useTranslations("admin.nav");
@@ -346,13 +372,14 @@ function SidebarContent({
         ))}
       </nav>
 
-      {/* Footer — user info + sign out */}
+      {/* Footer — user info + sign out (or Exit Demo for the public demo) */}
       <UserFooter
         userName={userName}
         userEmail={userEmail}
         userRole={userRole}
         collapsed={collapsed}
         onSignOut={onSignOut}
+        isPublicDemo={isPublicDemo}
       />
     </div>
   );
@@ -369,6 +396,7 @@ export function AdminSidebar({
   userRole,
   userName,
   userEmail,
+  isPublicDemo,
 }: AdminSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -378,7 +406,8 @@ export function AdminSidebar({
     setSigningOut(true);
     const supabase = createBrowserClient();
     await supabase.auth.signOut();
-    router.push("/auth/login");
+    // Demo visitors return to the marketing homepage; real users go to login.
+    router.push(isPublicDemo ? "/" : "/auth/login");
     router.refresh();
   }
 
@@ -420,6 +449,7 @@ export function AdminSidebar({
           collapsed={false}
           onClose={() => setMobileOpen(false)}
           onSignOut={handleSignOut}
+          isPublicDemo={isPublicDemo}
         />
       </div>
 
@@ -437,6 +467,7 @@ export function AdminSidebar({
           userEmail={userEmail}
           collapsed={true}
           onSignOut={handleSignOut}
+          isPublicDemo={isPublicDemo}
         />
       </div>
 
@@ -454,6 +485,7 @@ export function AdminSidebar({
           userEmail={userEmail}
           collapsed={false}
           onSignOut={handleSignOut}
+          isPublicDemo={isPublicDemo}
         />
       </div>
     </>

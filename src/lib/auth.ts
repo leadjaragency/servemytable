@@ -118,6 +118,7 @@ export async function getRestaurantFromSlug(slug: string) {
     country:         true,
     defaultLanguage: true,
     status:          true,
+    isPublicDemo:    true,
     branding:        true,
     tier:            { select: { features: true } },
   } as const;
