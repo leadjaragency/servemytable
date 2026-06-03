@@ -2,6 +2,7 @@ import { getRequiredSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 import { Bell } from "lucide-react";
+import { Toaster } from "sonner";
 
 import { prisma } from "@/lib/db";
 import { SuperAdminSidebar } from "@/components/super-admin/Sidebar";
@@ -106,6 +107,7 @@ export default async function SuperAdminLayout({
 
         <main className="flex-1">{children}</main>
       </div>
+      <Toaster position="top-right" richColors />
     </div>
   );
 }

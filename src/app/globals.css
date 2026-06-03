@@ -291,6 +291,25 @@
 }
 
 /* ============================================================
+   PORTAL FONT OVERRIDES
+   Sonner toasts and Radix UI dropdowns/dialogs/tooltips render
+   directly under <body>, outside any .zone-* wrapper, so they
+   cannot inherit zone-level font-family overrides. Sonner also
+   ships its own font declaration that beats CSS inheritance.
+   Force the brand UI font (Inter) explicitly on all of them.
+   ============================================================ */
+[data-sonner-toaster],
+[data-sonner-toaster] * {
+  font-family: var(--font-inter), "system-ui", sans-serif !important;
+}
+
+[data-radix-popper-content-wrapper],
+[role="dialog"],
+[role="alertdialog"] {
+  font-family: var(--font-inter), "system-ui", sans-serif;
+}
+
+/* ============================================================
    UTILITY COMPONENTS
    Used across all three portals.
    ============================================================ */
