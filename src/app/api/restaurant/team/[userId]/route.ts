@@ -3,6 +3,9 @@ import { z } from "zod";
 
 import { getRequiredSession, getRestaurantIdFromSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { isPublicDemoRestaurant } from "@/lib/demo-seed";
+
+const DEMO_BLOCKED = { error: "Team management is disabled in the demo restaurant." };
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +28,9 @@ export async function PUT(
       return NextResponse.json({ error: "Owner only" }, { status: 403 });
     }
     const restaurantId = getRestaurantIdFromSession(session);
+    if (await isPublicDemoRestaurant(restaurantId)) {
+      return NextResponse.json(DEMO_BLOCKED, { status: 403 });
+    }
 
     const target = await resolveTarget(restaurantId, userId);
     if (!target) return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -59,6 +65,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Owner only" }, { status: 403 });
     }
     const restaurantId = getRestaurantIdFromSession(session);
+    if (await isPublicDemoRestaurant(restaurantId)) {
+      return NextResponse.json(DEMO_BLOCKED, { status: 403 });
+    }
 
     const target = await resolveTarget(restaurantId, userId);
     if (!target) return NextResponse.json({ error: "User not found" }, { status: 404 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Printer, Download, RefreshCw, QrCode, Copy, Check } from "lucide-react";
+import { Printer, Download, RefreshCw, QrCode, Copy, Check, ChefHat, ExternalLink } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,8 @@ export interface QrCodesPageClientProps {
   restaurantName: string;
   restaurantSlug: string;
   baseUrl:        string;
+  kitchenUrl:     string;
+  kitchenQr:      string;
 }
 
 // ---------------------------------------------------------------------------
@@ -260,6 +262,8 @@ export function QrCodesPageClient({
   restaurantName,
   restaurantSlug,
   baseUrl,
+  kitchenUrl,
+  kitchenQr,
 }: QrCodesPageClientProps) {
   // qrMap: tableId → current data URL (starts from server-generated values)
   const [qrMap, setQrMap] = useState<Record<string, string>>(() => {
@@ -270,6 +274,47 @@ export function QrCodesPageClient({
 
   const [regenerating, setRegenerating] = useState<Record<string, boolean>>({});
   const [pdfLoading,   setPdfLoading]   = useState(false);
+
+  // ── Kitchen display QR ────────────────────────────────────────────────────
+  const [kitchen, setKitchen]               = useState({ url: kitchenUrl, qr: kitchenQr });
+  const [kitchenRotating, setKitchenRotating] = useState(false);
+  const [kitchenCopied, setKitchenCopied]     = useState(false);
+
+  const handleCopyKitchen = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(kitchen.url);
+      setKitchenCopied(true);
+      setTimeout(() => setKitchenCopied(false), 1800);
+    } catch {
+      /* clipboard unavailable */
+    }
+  }, [kitchen.url]);
+
+  const handleRotateKitchen = useCallback(async () => {
+    if (!confirm("Regenerate the kitchen link? The current QR code will stop working.")) return;
+    setKitchenRotating(true);
+    try {
+      const res  = await fetch("/api/restaurant/kitchen-token", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok || !data.qr) throw new Error(data.error ?? "Failed");
+      setKitchen({ url: data.url, qr: data.qr });
+      toast.success("Kitchen link regenerated — re-share the new QR");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to regenerate kitchen link");
+    } finally {
+      setKitchenRotating(false);
+    }
+  }, []);
+
+  const handleDownloadKitchenQr = useCallback(() => {
+    const a = document.createElement("a");
+    a.href = kitchen.qr;
+    a.download = `kitchen-display-${restaurantSlug}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }, [kitchen.qr, restaurantSlug]);
 
   // ── Regenerate single QR ──────────────────────────────────────────────────
   const handleRegenerate = useCallback(async (tableId: string) => {
@@ -395,6 +440,67 @@ export function QrCodesPageClient({
         <code className="text-ra-accent">
           {baseUrl}/table/<span className="text-ra-text">5</span>?restaurant=<span className="text-ra-text">{restaurantSlug}</span>
         </code>
+      </div>
+
+      {/* ── Kitchen Display ────────────────────────────────────────────────── */}
+      <div className="rounded-xl border border-ra-border bg-ra-surface p-4 sm:p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="flex shrink-0 justify-center">
+            <div className="rounded-xl bg-white p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={kitchen.qr} alt="Kitchen display QR code" className="h-28 w-28" />
+            </div>
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <ChefHat className="h-4 w-4 text-ra-accent" />
+              <h2 className="text-base font-bold text-ra-text">Kitchen Display</h2>
+            </div>
+            <p className="mt-1 text-sm text-ra-muted">
+              Open this on a kitchen tablet — your chef sees live orders and advances them, no login needed.
+              Keep this link private; anyone with it can view and update orders.
+            </p>
+
+            <div className="mt-3 flex items-center gap-2 rounded-lg border border-ra-border bg-ra-bg px-3 py-2 text-xs text-ra-muted">
+              <span className="truncate flex-1">{kitchen.url}</span>
+              <a
+                href={kitchen.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 hover:text-ra-accent transition-colors"
+                title="Open kitchen display"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                onClick={handleCopyKitchen}
+                className="flex items-center gap-2 rounded-lg border border-ra-border bg-ra-surface px-3 py-2 text-sm text-ra-muted hover:text-ra-text hover:border-ra-accent/40 transition-colors"
+              >
+                {kitchenCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                {kitchenCopied ? "Copied" : "Copy link"}
+              </button>
+              <button
+                onClick={handleDownloadKitchenQr}
+                className="flex items-center gap-2 rounded-lg border border-ra-border bg-ra-surface px-3 py-2 text-sm text-ra-muted hover:text-ra-text hover:border-ra-accent/40 transition-colors"
+              >
+                <Download className="h-4 w-4" />
+                Download QR
+              </button>
+              <button
+                onClick={handleRotateKitchen}
+                disabled={kitchenRotating}
+                className="flex items-center gap-2 rounded-lg border border-ra-border bg-ra-surface px-3 py-2 text-sm text-ra-muted hover:text-ra-text hover:border-ra-accent/40 disabled:opacity-40 transition-colors"
+              >
+                <RefreshCw className={cn("h-4 w-4", kitchenRotating && "animate-spin")} />
+                Regenerate
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ── QR grid ────────────────────────────────────────────────────────── */}

@@ -158,9 +158,14 @@ export async function middleware(req: NextRequest) {
   // ── /table/* — Customer app (public, no auth required) ───────────────────
   if (pathname.startsWith("/table")) return res;
 
-  // ── /api/chat/*, /api/games/* — Customer-facing (public) ─────────────────
+  // ── /kitchen/* — No-login kitchen display (token-gated in the route) ─────
+  if (pathname.startsWith("/kitchen")) return res;
+
+  // ── /api/chat/*, /api/games/*, /api/kitchen/*, /api/demo/* — public ──────
   if (pathname.startsWith("/api/chat")) return res;
   if (pathname.startsWith("/api/games")) return res;
+  if (pathname.startsWith("/api/kitchen")) return res;
+  if (pathname.startsWith("/api/demo")) return res;
 
   return res;
 }

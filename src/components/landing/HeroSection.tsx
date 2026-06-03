@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Smartphone } from "lucide-react";
+import { ArrowRight, Sparkles, Smartphone, PlayCircle } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import AnimatedText from "./motion/AnimatedText";
 import CountUp from "./motion/CountUp";
@@ -100,6 +100,15 @@ export default function HeroSection() {
                 >
                   Start Free — No Card Needed
                   <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+              <motion.div variants={prefersReduced ? undefined : scaleIn(0.9)}>
+                <Link
+                  href="/table/1?restaurant=saffron-palace"
+                  className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#1B2A4A] text-white hover:bg-[#2A3D66] transition-colors shadow-md"
+                >
+                  <PlayCircle className="w-4 h-4" />
+                  Try Live Demo
                 </Link>
               </motion.div>
               <motion.div variants={prefersReduced ? undefined : scaleIn(0.95)}>

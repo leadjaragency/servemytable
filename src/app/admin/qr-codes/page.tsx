@@ -1,6 +1,7 @@
 import { getRequiredSession, getPrismaForSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { generateTableQR } from "@/lib/qr-generator";
+import { generateTableQR, generateQR } from "@/lib/qr-generator";
+import { generateKitchenToken } from "@/lib/kitchen";
 import { QrCodesPageClient, type QrTable } from "@/components/admin/QrCodesPageClient";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ export default async function QrCodesPage() {
   const [restaurant, rawTables] = await Promise.all([
     db.restaurant.findUnique({
       where:  { id: restaurantId },
-      select: { name: true, slug: true },
+      select: { name: true, slug: true, kitchenToken: true },
     }),
     db.table.findMany({
       where:   { restaurantId },
@@ -39,6 +40,18 @@ export default async function QrCodesPage() {
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
+  // Ensure a kitchen-display token exists (generate + persist once)
+  let kitchenToken = restaurant.kitchenToken;
+  if (!kitchenToken) {
+    kitchenToken = generateKitchenToken();
+    await db.restaurant.update({
+      where: { id: restaurantId },
+      data:  { kitchenToken },
+    });
+  }
+  const kitchenUrl = `${baseUrl}/kitchen/${kitchenToken}`;
+  const kitchenQr  = await generateQR(kitchenUrl);
+
   // Pre-generate QR codes server-side for tables that don't have one saved yet
   const tables: QrTable[] = await Promise.all(
     rawTables.map(async (t) => {
@@ -54,6 +67,8 @@ export default async function QrCodesPage() {
         restaurantName={restaurant.name}
         restaurantSlug={restaurantSlug}
         baseUrl={baseUrl}
+        kitchenUrl={kitchenUrl}
+        kitchenQr={kitchenQr}
       />
     </div>
   );

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getRequiredSession, getRestaurantIdFromSession } from "@/lib/auth";
 import { getSupabaseAdmin } from "@/lib/supabase-server";
 import { prisma } from "@/lib/db";
+import { isPublicDemoRestaurant } from "@/lib/demo-seed";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,13 @@ export async function POST(req: Request) {
       );
     }
     const restaurantId = getRestaurantIdFromSession(session);
+
+    if (await isPublicDemoRestaurant(restaurantId)) {
+      return NextResponse.json(
+        { error: "Team management is disabled in the demo restaurant." },
+        { status: 403 }
+      );
+    }
 
     const body   = await req.json().catch(() => ({}));
     const parsed = InviteSchema.safeParse(body);

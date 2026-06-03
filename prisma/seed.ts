@@ -161,6 +161,7 @@ async function main() {
       taxRate: 0.08875,
       currency: "USD",
       status: "active",
+      isPublicDemo: true,
       tierId: tierStandard.id,
     },
   });

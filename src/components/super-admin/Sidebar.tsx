@@ -19,6 +19,7 @@ import {
   Radio,
   ScrollText,
   ToggleLeft,
+  QrCode,
 } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
@@ -51,6 +52,7 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "All Restaurants", href: "/super-admin/restaurants",   icon: Building2 },
       { label: "Approvals",       href: "/super-admin/approvals",     icon: ClipboardCheck, hasBadge: true },
       { label: "Feature Flags",   href: "/super-admin/feature-flags", icon: ToggleLeft },
+      { label: "Demo Access",     href: "/super-admin/demo",          icon: QrCode },
     ],
   },
   {

@@ -40,6 +40,8 @@ model Restaurant {
   taxRate         Float              @default(0.08)
   currency      String             @default("CAD")
   status            String             @default("pending")
+  isPublicDemo      Boolean            @default(false)  // open, no-login demo restaurant
+  kitchenToken      String?            @unique          // capability token for no-login kitchen display
   trialStartsAt     DateTime?
   trialEndsAt       DateTime?
   lastWarningSentAt DateTime?

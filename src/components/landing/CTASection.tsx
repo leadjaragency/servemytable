@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Monitor, Smartphone } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import AnimatedSection from "./motion/AnimatedSection";
 import AnimatedText from "./motion/AnimatedText";
@@ -108,6 +108,39 @@ export default function CTASection() {
             </motion.p>
           </div>
 
+        </AnimatedSection>
+
+        {/* ── Try the live demo — no sign-up ───────────────────────────── */}
+        <AnimatedSection
+          variants={prefersReduced ? undefined : fadeUp()}
+          threshold={0.2}
+          className="mt-8 rounded-3xl border border-[#F0E8D6] bg-[#FAF6ED] px-8 py-10 text-center"
+        >
+          <p className="text-[#C6A34E] text-[11px] font-semibold uppercase tracking-[3px] mb-2">
+            No sign-up needed
+          </p>
+          <h3 className="font-display text-3xl sm:text-4xl text-[#1B2A4A] mb-2 leading-none">
+            Try the live demo
+          </h3>
+          <p className="text-[#8B7355] text-sm mb-7 max-w-md mx-auto">
+            Explore both sides of ServeMyTable instantly — see what your guests see, and what you&apos;d manage.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/table/1?restaurant=saffron-palace"
+              className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#C6A34E] text-[#1B2A4A] hover:bg-[#A8873A] hover:text-white transition-colors shadow-md"
+            >
+              <Smartphone className="w-4 h-4" />
+              Customer Experience
+            </Link>
+            <Link
+              href="/api/demo/enter"
+              className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#1B2A4A] text-white hover:bg-[#2A3D66] transition-colors shadow-md"
+            >
+              <Monitor className="w-4 h-4" />
+              Admin Dashboard
+            </Link>
+          </div>
         </AnimatedSection>
       </div>
     </section>
