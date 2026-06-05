@@ -94,8 +94,8 @@ function ApproveModal({
               key={t.id}
               className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-all ${
                 tierId === t.id
-                  ? "border-blue-400 bg-blue-50"
-                  : "border-slate-200 hover:bg-slate-50"
+                  ? "border-blue-400 bg-blue-500/15"
+                  : "border-sa-border hover:bg-white/5"
               }`}
             >
               <input
@@ -256,7 +256,7 @@ function ApprovalCard({
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-lg font-bold text-amber-400">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/150/10 text-lg font-bold text-amber-400">
               {restaurant.name.charAt(0)}
             </div>
             <div>
@@ -267,7 +267,7 @@ function ApprovalCard({
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400">
+          <div className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/150/10 px-3 py-1 text-xs font-medium text-amber-400">
             <Clock className="h-3 w-3" />
             Pending
           </div>

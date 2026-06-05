@@ -66,7 +66,7 @@ function SuccessOverlay({
 }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-white px-8 text-center"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-cu-surface px-8 text-center"
       style={{ animation: "fadeInScale 0.35s ease both" }}
     >
       <div className="flex h-24 w-24 items-center justify-center rounded-full bg-green-100">
@@ -121,7 +121,7 @@ function CartItemRow({
   const itemTotal = price * quantity;
 
   return (
-    <div className="rounded-2xl bg-white border border-cu-border shadow-sm overflow-hidden">
+    <div className="rounded-2xl bg-cu-surface border border-cu-border shadow-sm overflow-hidden">
       <div className="flex items-center gap-3 p-3">
         <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-orange-50 text-2xl leading-none">
           {imageEmoji ?? "🍽️"}
@@ -300,7 +300,7 @@ function PromoSection({ restaurantSlug, subtotal, applied, onApply, onRemove }: 
   }
 
   return (
-    <div className="rounded-2xl bg-white border border-cu-border shadow-sm overflow-hidden">
+    <div className="rounded-2xl bg-cu-surface border border-cu-border shadow-sm overflow-hidden">
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center gap-2 px-4 py-3 text-sm text-cu-text/60 hover:text-cu-text transition-colors"
@@ -453,7 +453,7 @@ export default function CartPage() {
       )}
 
       {/* ── Header ── */}
-      <header className="sticky top-0 z-30 border-b border-cu-border bg-white/95 backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-cu-border bg-[#131313]/95 backdrop-blur-md">
         <div className="flex items-center gap-3 px-4 py-3.5">
           <button
             onClick={navToMenu}
@@ -502,7 +502,7 @@ export default function CartPage() {
         <AllergenWarning allergens={cartAllergens} />
 
         {/* Order notes */}
-        <div className="rounded-2xl bg-white border border-cu-border shadow-sm p-4">
+        <div className="rounded-2xl bg-cu-surface border border-cu-border shadow-sm p-4">
           <label className="flex items-center gap-1.5 text-xs font-semibold text-cu-text mb-2">
             <StickyNote className="h-3.5 w-3.5 text-cu-accent" />
             Order notes
@@ -529,7 +529,7 @@ export default function CartPage() {
         />
 
         {/* Pricing summary */}
-        <div className="rounded-2xl bg-white border border-cu-border shadow-sm p-4 space-y-2.5">
+        <div className="rounded-2xl bg-cu-surface border border-cu-border shadow-sm p-4 space-y-2.5">
           <p className="text-sm font-semibold text-cu-text">{t("orderSummary")}</p>
 
           <div className="flex justify-between text-sm">
@@ -588,7 +588,7 @@ export default function CartPage() {
               `/table/${params.tableId}/chat?restaurant=${encodeURIComponent(restaurantSlug)}`
             )
           }
-          className="flex w-full items-center gap-3 rounded-2xl border border-cu-border bg-white px-4 py-3 text-sm text-cu-text/60 hover:border-cu-accent/30 hover:text-cu-text transition-colors shadow-sm"
+          className="flex w-full items-center gap-3 rounded-2xl border border-cu-border bg-cu-surface px-4 py-3 text-sm text-cu-text/60 hover:border-cu-accent/30 hover:text-cu-text transition-colors shadow-sm"
         >
           <MessageCircle className="h-4 w-4 text-cu-accent flex-shrink-0" />
           <span className="text-left">

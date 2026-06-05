@@ -44,7 +44,7 @@ function OrderSummaryCard({
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
 
   return (
-    <div className="mt-3 overflow-hidden rounded-xl border border-cu-accent/20 bg-white shadow-sm">
+    <div className="mt-3 overflow-hidden rounded-xl border border-cu-accent/30 bg-cu-surface shadow-sm">
       {/* Header */}
       <div className="flex items-center gap-2 bg-cu-accent/8 px-4 py-2.5">
         <ShoppingBag className="h-4 w-4 text-cu-accent" />
@@ -166,7 +166,7 @@ export function ChatBubble({
 
         {/* Text bubble */}
         {message.content || message.isStreaming ? (
-          <div className="rounded-2xl rounded-bl-sm bg-white px-4 py-2.5 shadow-sm ring-1 ring-black/5">
+          <div className="rounded-2xl rounded-bl-sm bg-cu-surface px-4 py-2.5 shadow-sm ring-1 ring-white/8">
             <p className="text-sm leading-relaxed text-cu-text whitespace-pre-wrap break-words">
               {message.content}
               {message.isStreaming && <StreamingCursor />}

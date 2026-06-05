@@ -35,7 +35,7 @@ export function NotificationBell({ count, recentOrders }: NotificationBellProps)
     <DropdownMenu.Root open={open} onOpenChange={setOpen}>
       <DropdownMenu.Trigger asChild>
         <button
-          className="relative flex h-8 w-8 items-center justify-center rounded-xl text-ra-muted hover:bg-slate-100 hover:text-ra-text transition-colors"
+          className="relative flex h-8 w-8 items-center justify-center rounded-xl text-ra-muted hover:bg-white/5 hover:text-ra-text transition-colors"
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4" />
@@ -83,7 +83,7 @@ export function NotificationBell({ count, recentOrders }: NotificationBellProps)
                 <DropdownMenu.Item key={order.id} asChild>
                   <Link
                     href="/admin/orders"
-                    className="flex items-start gap-3 px-4 py-3 text-sm hover:bg-slate-50 transition-colors outline-none cursor-pointer border-b border-ra-border/50 last:border-0"
+                    className="flex items-start gap-3 px-4 py-3 text-sm hover:bg-white/5 transition-colors outline-none cursor-pointer border-b border-ra-border/50 last:border-0"
                   >
                     <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-ra-accent/15">
                       <ShoppingBag className="h-3.5 w-3.5 text-ra-accent" />

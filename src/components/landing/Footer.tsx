@@ -10,7 +10,7 @@ export default function Footer() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <footer className="bg-[#1B2A4A] text-white py-12">
+    <footer className="bg-[#141414] text-white py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection
           variants={prefersReduced ? undefined : staggerContainer(0.1)}

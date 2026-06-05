@@ -259,11 +259,11 @@ function FoodTrivia({ sessionId, restaurantSlug, onDiscount }: TriviaProps) {
       <p className="font-semibold text-cu-text text-base leading-snug">{q.question}</p>
       <div className="grid grid-cols-1 gap-2.5">
         {q.options.map((opt, idx) => {
-          let style = "border-cu-border bg-white text-cu-text";
+          let style = "border-cu-border bg-cu-surface text-cu-text";
           if (selected !== null) {
             if (idx === q.correct)     style = "border-cu-green bg-cu-green/10 text-cu-green font-semibold";
             else if (idx === selected) style = "border-cu-red bg-cu-red/10 text-cu-red";
-            else                       style = "border-cu-border bg-white/50 text-cu-text/40";
+            else                       style = "border-cu-border bg-white/5 text-cu-text/40";
           }
           return (
             <button
@@ -453,11 +453,11 @@ function WordScramble({ sessionId, restaurantSlug, onDiscount }: ScrambleProps) 
       {/* Choices */}
       <div className="grid grid-cols-2 gap-2.5">
         {current.choices.map((choice) => {
-          let style = "border-cu-border bg-white text-cu-text";
+          let style = "border-cu-border bg-cu-surface text-cu-text";
           if (selected !== null) {
             if (choice === correctWord)   style = "border-cu-green bg-cu-green/10 text-cu-green font-semibold";
             else if (choice === selected) style = "border-cu-red bg-cu-red/10 text-cu-red";
-            else                          style = "border-cu-border bg-white/50 text-cu-text/40";
+            else                          style = "border-cu-border bg-white/5 text-cu-text/40";
           }
           return (
             <button
@@ -538,7 +538,7 @@ export default function GamesPage() {
 
   return (
     <div className="min-h-dvh bg-cu-bg">
-      <header className="sticky top-0 z-10 border-b border-cu-border bg-white/95 px-4 py-3 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 border-b border-cu-border bg-[#131313]/95 px-4 py-3 backdrop-blur-sm">
         <h1 className="font-display text-lg font-bold text-cu-text text-center">Games & Prizes</h1>
         {discount !== null && (
           <p className="text-center text-xs text-cu-green font-medium mt-0.5">
@@ -548,7 +548,7 @@ export default function GamesPage() {
       </header>
 
       {/* Tab bar */}
-      <div className="flex border-b border-cu-border bg-white">
+      <div className="flex border-b border-cu-border bg-cu-surface">
         {(["spin", "trivia", "scramble"] as const).map((t) => (
           <button
             key={t}

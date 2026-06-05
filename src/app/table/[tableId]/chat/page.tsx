@@ -387,7 +387,7 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col bg-cu-bg" style={{ minHeight: "calc(100dvh - 64px)" }}>
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-cu-border bg-white/95 px-4 py-3 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-cu-border bg-[#131313]/95 px-4 py-3 backdrop-blur-sm">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cu-bg text-xl leading-none">
           {waiterAvatar}
         </div>
@@ -477,7 +477,7 @@ export default function ChatPage() {
       </div>
 
       {/* ── Input bar — fixed above BottomNav ──────────────────────────── */}
-      <div className="fixed bottom-16 left-0 right-0 z-30 border-t border-cu-border bg-white/95 px-4 py-2.5 backdrop-blur-sm">
+      <div className="fixed bottom-16 left-0 right-0 z-30 border-t border-cu-border bg-[#131313]/95 px-4 py-2.5 backdrop-blur-sm">
         <div className="mx-auto flex max-w-[480px] items-center gap-2">
           <input
             ref={inputRef}

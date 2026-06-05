@@ -120,15 +120,15 @@ export default async function AdminLayout({
       <div className="flex min-h-screen flex-col pl-0 md:pl-[60px] lg:pl-[240px]">
         {/* ── Topbar ──────────────────────────────────────────────────── */}
         <header
-          className="sticky top-0 z-20 flex h-[58px] items-center justify-between px-6 pl-14 md:pl-6"
-          style={{ background: "#FFFFFF", borderBottom: "1px solid #CBD5E1" }}
+          className="sticky top-0 z-20 flex h-[58px] items-center justify-between px-6 pl-14 md:pl-6 backdrop-blur-md"
+          style={{ background: "rgba(19,19,19,0.92)", borderBottom: "1px solid #2A2A2A" }}
         >
           {/* Restaurant name (hidden on mobile — hamburger is there instead) */}
           <div className="hidden md:block">
-            <p className="text-sm font-semibold leading-tight" style={{ color: "#0F172A" }}>
+            <p className="text-sm font-semibold leading-tight" style={{ color: "#FAF6ED" }}>
               {restaurant.name}
             </p>
-            <p className="text-xs font-medium leading-tight" style={{ color: "#334155" }}>{t("restaurantAdmin")}</p>
+            <p className="text-xs font-medium leading-tight" style={{ color: "#AD897E" }}>{t("restaurantAdmin")}</p>
           </div>
           <div className="md:hidden" />
 

@@ -36,7 +36,7 @@ export default function TestimonialsSection() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="testimonials" className="py-20 bg-[#FAF6ED]">
+    <section id="testimonials" className="py-20 bg-[#0A0A0A]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Visual header strip */}
@@ -52,7 +52,7 @@ export default function TestimonialsSection() {
             className="object-cover object-center"
             sizes="(max-width: 640px) 95vw, (max-width: 1280px) 90vw, 1152px"
           />
-          <div className="absolute inset-0 bg-[#1B2A4A]/65" />
+          <div className="absolute inset-0 bg-[#141414]/65" />
 
           <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
             <motion.p
@@ -93,7 +93,7 @@ export default function TestimonialsSection() {
               variants={prefersReduced ? undefined : fadeUp()}
               whileHover={prefersReduced ? undefined : { y: -6, boxShadow: "0 20px 60px rgba(27,42,74,0.12)" }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-2xl p-6 border border-[#F0E8D6] shadow-sm flex flex-col relative"
+              className="bg-[#131313] rounded-2xl p-6 border border-[#2A2A2A] shadow-sm flex flex-col relative"
             >
               {/* Decorative quote mark */}
               <motion.span
@@ -124,18 +124,18 @@ export default function TestimonialsSection() {
               </motion.div>
 
               {/* Quote */}
-              <p className="text-[#1B2A4A] text-sm leading-relaxed mb-6 italic flex-1 relative z-10">
+              <p className="text-[#FAF6ED] text-sm leading-relaxed mb-6 italic flex-1 relative z-10">
                 &ldquo;{t.quote}&rdquo;
               </p>
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#FAF6ED] border border-[#F0E8D6] flex items-center justify-center text-xl shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#0A0A0A] border border-[#2A2A2A] flex items-center justify-center text-xl shrink-0">
                   {t.avatar}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-[#1B2A4A]">{t.name}</div>
-                  <div className="text-xs text-[#8B7355]">{t.restaurant}</div>
+                  <div className="text-sm font-semibold text-[#FAF6ED]">{t.name}</div>
+                  <div className="text-xs text-[#AD897E]">{t.restaurant}</div>
                 </div>
               </div>
             </motion.div>
@@ -145,7 +145,7 @@ export default function TestimonialsSection() {
         {/* Review CTA strip */}
         <AnimatedSection
           variants={prefersReduced ? undefined : fadeUp(0.1)}
-          className="mt-10 rounded-2xl overflow-hidden border border-[#F0E8D6]"
+          className="mt-10 rounded-2xl overflow-hidden border border-[#2A2A2A]"
         >
           <div className="grid sm:grid-cols-2 items-center">
             {/* Image side */}
@@ -162,11 +162,11 @@ export default function TestimonialsSection() {
                 className="object-cover"
                 sizes="(max-width: 640px) 95vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#1B2A4A]/10" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#141414]/10" />
             </motion.div>
             {/* Text side */}
             <motion.div
-              className="bg-[#1B2A4A] p-6 sm:p-8"
+              className="bg-[#141414] p-6 sm:p-8"
               variants={prefersReduced ? undefined : slideInRight(0.2)}
               initial="hidden"
               animate="visible"

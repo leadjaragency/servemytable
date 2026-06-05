@@ -17,9 +17,9 @@ export interface SwitchProps {
 }
 
 const accentClasses = {
-  indigo: "data-[state=checked]:bg-indigo-600",
-  amber:  "data-[state=checked]:bg-amber-500",
-  green:  "data-[state=checked]:bg-green-600",
+  indigo: "data-[state=checked]:bg-[#FF4D00]",
+  amber:  "data-[state=checked]:bg-[#C6A34E]",
+  green:  "data-[state=checked]:bg-[#34C759]",
 };
 
 function Switch({

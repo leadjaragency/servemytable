@@ -18,7 +18,7 @@ export default function TrialSection() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="trial" className="py-20 bg-white">
+    <section id="trial" className="py-20 bg-[#131313]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -32,7 +32,7 @@ export default function TrialSection() {
             Risk-Free Trial
           </motion.p>
           <motion.h2
-            className="font-display text-4xl md:text-5xl text-[#1B2A4A] mb-4"
+            className="font-display text-4xl md:text-5xl text-[#FAF6ED] mb-4"
             variants={prefersReduced ? undefined : fadeUp(0.1)}
             initial="hidden"
             animate="visible"
@@ -40,7 +40,7 @@ export default function TrialSection() {
             Try it free for 14 days
           </motion.h2>
           <motion.p
-            className="text-[#8B7355] text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+            className="text-[#AD897E] text-base md:text-lg max-w-xl mx-auto leading-relaxed"
             variants={prefersReduced ? undefined : fadeUp(0.2)}
             initial="hidden"
             animate="visible"

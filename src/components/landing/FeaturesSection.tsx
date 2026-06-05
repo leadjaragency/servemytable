@@ -82,7 +82,7 @@ export default function FeaturesSection() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="features" className="py-20 bg-white">
+    <section id="features" className="py-20 bg-[#131313]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -96,7 +96,7 @@ export default function FeaturesSection() {
             What&apos;s Inside
           </motion.p>
           <motion.h2
-            className="font-display text-4xl md:text-5xl text-[#1B2A4A] mb-4"
+            className="font-display text-4xl md:text-5xl text-[#FAF6ED] mb-4"
             variants={prefersReduced ? undefined : fadeUp(0.1)}
             initial="hidden"
             animate="visible"
@@ -104,7 +104,7 @@ export default function FeaturesSection() {
             One Platform. Zero Chaos.
           </motion.h2>
           <motion.p
-            className="text-[#8B7355] text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
+            className="text-[#AD897E] text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
             variants={prefersReduced ? undefined : fadeUp(0.2)}
             initial="hidden"
             animate="visible"
@@ -126,7 +126,7 @@ export default function FeaturesSection() {
                 variants={prefersReduced ? undefined : scaleIn()}
                 whileHover={prefersReduced ? undefined : { y: -4, boxShadow: "0 12px 40px rgba(198,163,78,0.15)" }}
                 transition={{ duration: 0.2 }}
-                className="group p-6 rounded-2xl border border-[#F0E8D6] hover:border-[#C6A34E]/30 transition-colors duration-200 bg-white cursor-default"
+                className="group p-6 rounded-2xl border border-[#2A2A2A] hover:border-[#C6A34E]/30 transition-colors duration-200 bg-[#131313] cursor-default"
               >
                 <motion.div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
@@ -136,8 +136,8 @@ export default function FeaturesSection() {
                 >
                   <Icon className="w-5 h-5" style={{ color: feature.iconColor }} />
                 </motion.div>
-                <h3 className="font-display text-xl text-[#1B2A4A] mb-2">{feature.title}</h3>
-                <p className="text-sm text-[#8B7355] leading-relaxed">{feature.description}</p>
+                <h3 className="font-display text-xl text-[#FAF6ED] mb-2">{feature.title}</h3>
+                <p className="text-sm text-[#AD897E] leading-relaxed">{feature.description}</p>
               </motion.div>
             );
           })}
@@ -160,7 +160,7 @@ export default function FeaturesSection() {
                 variants={prefersReduced ? undefined : scaleIn()}
                 whileHover={prefersReduced ? undefined : { scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative rounded-2xl overflow-hidden h-52 sm:h-60 shadow-sm border border-[#F0E8D6]"
+                className="group relative rounded-2xl overflow-hidden h-52 sm:h-60 shadow-sm border border-[#2A2A2A]"
               >
                 <Image
                   src={img.src}
@@ -169,7 +169,7 @@ export default function FeaturesSection() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 640px) 95vw, (max-width: 1024px) 45vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1B2A4A]/80 via-[#1B2A4A]/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-[#141414]/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <div className="font-display text-xl text-white leading-none">{img.label}</div>
                   <div className="text-[11px] text-[#C6A34E] font-semibold mt-1 tracking-wider">{img.stat}</div>

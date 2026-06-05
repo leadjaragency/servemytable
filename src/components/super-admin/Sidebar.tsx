@@ -99,7 +99,7 @@ export function SuperAdminSidebar({ pendingCount, adminName }: SuperAdminSidebar
     .slice(0, 2);
 
   const content = (
-    <div className="flex h-full flex-col" style={{ background: "#1E3A5F" }}>
+    <div className="flex h-full flex-col" style={{ background: "#0E0E0E" }}>
 
       {/* Logo area */}
       <div
@@ -153,7 +153,7 @@ export function SuperAdminSidebar({ pendingCount, adminName }: SuperAdminSidebar
                     )}
                     style={
                       isActive
-                        ? { background: "#2563EB", color: "#FFFFFF" }
+                        ? { background: "#FF4D00", color: "#FFFFFF" }
                         : { color: "rgba(255,255,255,0.65)" }
                     }
                     onMouseEnter={(e) => {
@@ -200,7 +200,7 @@ export function SuperAdminSidebar({ pendingCount, adminName }: SuperAdminSidebar
         >
           <div
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
-            style={{ background: "#2563EB" }}
+            style={{ background: "#FF4D00" }}
           >
             {initials}
           </div>
@@ -229,7 +229,7 @@ export function SuperAdminSidebar({ pendingCount, adminName }: SuperAdminSidebar
       {/* Mobile hamburger */}
       <button
         className="lg:hidden fixed top-[15px] left-4 z-50 flex h-8 w-8 items-center justify-center rounded-lg transition-colors"
-        style={{ background: "#1E3A5F", border: "none", color: "#FFFFFF" }}
+        style={{ background: "#0E0E0E", border: "none", color: "#FFFFFF" }}
         onClick={() => setMobileOpen((o) => !o)}
         aria-label={mobileOpen ? "Close menu" : "Open menu"}
       >
@@ -239,7 +239,7 @@ export function SuperAdminSidebar({ pendingCount, adminName }: SuperAdminSidebar
       {/* Desktop sidebar */}
       <aside
         className="hidden lg:flex fixed inset-y-0 left-0 z-30 w-[260px] flex-col"
-        style={{ background: "#1E3A5F" }}
+        style={{ background: "#0E0E0E" }}
       >
         {content}
       </aside>
@@ -260,7 +260,7 @@ export function SuperAdminSidebar({ pendingCount, adminName }: SuperAdminSidebar
           "transition-transform duration-300 ease-in-out",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
-        style={{ background: "#1E3A5F" }}
+        style={{ background: "#0E0E0E" }}
       >
         {content}
       </aside>

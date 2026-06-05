@@ -67,9 +67,9 @@ export default async function ApiUsagePage() {
       {/* Platform totals */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: "API Calls Today",   value: platformCallsToday,                  icon: Activity,    color: "bg-blue-50 text-blue-600" },
-          { label: "Tokens Today",      value: platformTokensToday.toLocaleString(), icon: Zap,         color: "bg-indigo-50 text-indigo-600" },
-          { label: "Cost Today",        value: `$${platformCostToday.toFixed(4)}`,   icon: DollarSign,  color: "bg-amber-50 text-amber-600" },
+          { label: "API Calls Today",   value: platformCallsToday,                  icon: Activity,    color: "bg-blue-500/15 text-blue-600" },
+          { label: "Tokens Today",      value: platformTokensToday.toLocaleString(), icon: Zap,         color: "bg-sa-accent/10 text-sa-accent" },
+          { label: "Cost Today",        value: `$${platformCostToday.toFixed(4)}`,   icon: DollarSign,  color: "bg-amber-500/15 text-amber-600" },
           { label: "Total API Cost",    value: `$${platformCostTotal.toFixed(4)}`,   icon: DollarSign,  color: "bg-violet-50 text-violet-600" },
         ].map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="rounded-2xl border border-sa-border bg-sa-surface p-5 space-y-3">
@@ -122,7 +122,7 @@ export default async function ApiUsagePage() {
                 costWeek: number;
                 costTotal: number;
               }) => (
-                <tr key={row.id} className="hover:bg-slate-50 transition-colors">
+                <tr key={row.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-4 py-3 font-medium text-sa-text">{row.name}</td>
                   <td className="px-4 py-3 text-sa-muted">{row.callsToday}</td>
                   <td className="px-4 py-3 text-sa-muted">{row.callsWeek}</td>

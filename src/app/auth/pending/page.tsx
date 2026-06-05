@@ -44,7 +44,7 @@ export default function PendingPage() {
         </div>
 
         {/* ── Steps card ───────────────────────────────────────────────── */}
-        <div className="rounded-2xl border border-cu-border bg-white shadow-sm shadow-cu-text/5 px-6 py-7">
+        <div className="rounded-2xl border border-cu-border bg-[#131313] shadow-sm shadow-cu-text/5 px-6 py-7">
           <p className="text-xs font-semibold uppercase tracking-widest text-cu-muted mb-5">
             What happens next
           </p>
@@ -75,7 +75,7 @@ export default function PendingPage() {
         <div className="mt-6 flex flex-col items-center gap-3">
           <Link
             href="/auth/login"
-            className="flex h-10 w-full items-center justify-center rounded-xl border border-cu-border bg-white text-sm font-medium text-cu-text shadow-sm hover:bg-cu-bg transition-colors"
+            className="flex h-10 w-full items-center justify-center rounded-xl border border-cu-border bg-[#131313] text-sm font-medium text-cu-text shadow-sm hover:bg-cu-bg transition-colors"
           >
             Back to sign in
           </Link>

@@ -50,13 +50,13 @@ export function LanguageSelector({ currentLocale, restaurantId }: LanguageSelect
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+          className="flex items-center gap-1.5 rounded-md border border-[#2A2A2A] bg-[#1A1A1A] px-2.5 py-1 text-xs font-medium text-[#FAF6ED] hover:bg-[#201F1F] disabled:opacity-60"
           disabled={saving}
           aria-label={t("language")}
         >
           <span>{current.flag}</span>
           <span className="hidden sm:inline">{current.code.toUpperCase()}</span>
-          <ChevronDown className="h-3 w-3 text-slate-400" />
+          <ChevronDown className="h-3 w-3 text-[#AD897E]" />
         </button>
       </DropdownMenu.Trigger>
 
@@ -64,9 +64,9 @@ export function LanguageSelector({ currentLocale, restaurantId }: LanguageSelect
         <DropdownMenu.Content
           align="end"
           sideOffset={6}
-          className="z-50 min-w-[160px] rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+          className="z-50 min-w-[160px] rounded-lg border border-[#2A2A2A] bg-[#1A1A1A] py-1 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8)]"
         >
-          <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+          <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#AD897E]">
             {t("language")}
           </p>
           {LANGUAGES.map((lang) => (
@@ -78,14 +78,14 @@ export function LanguageSelector({ currentLocale, restaurantId }: LanguageSelect
                 ${lang.comingSoon
                   ? "cursor-not-allowed opacity-50"
                   : lang.code === currentLocale
-                    ? "bg-amber-50 font-semibold text-amber-700"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#C6A34E]/15 font-semibold text-[#E8C269]"
+                    : "text-[#FAF6ED]/80 hover:bg-white/5"
                 }`}
             >
               <span className="text-base">{lang.flag}</span>
               <span className="flex-1">{lang.label}</span>
               {lang.comingSoon && (
-                <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">
+                <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[10px] font-medium text-[#AD897E]">
                   {t("languageSoon")}
                 </span>
               )}

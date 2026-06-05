@@ -138,7 +138,7 @@ function AddToCartSheet({
         onClick={onClose}
       />
       {/* Sheet */}
-      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 rounded-t-3xl bg-white pb-safe">
+      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 rounded-t-3xl bg-cu-surface pb-safe">
         {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1">
           <div className="w-10 h-1 rounded-full bg-cu-border" />
@@ -254,9 +254,9 @@ function DishDetailSheet({
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px]" onClick={onClose} />
-      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 rounded-t-3xl bg-white max-h-[90dvh] overflow-y-auto">
+      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 rounded-t-3xl bg-cu-surface max-h-[90dvh] overflow-y-auto">
         {/* Handle */}
-        <div className="sticky top-0 z-10 bg-white pt-3 pb-2 flex justify-center">
+        <div className="sticky top-0 z-10 bg-cu-surface pt-3 pb-2 flex justify-center">
           <div className="w-10 h-1 rounded-full bg-cu-border" />
         </div>
 
@@ -411,7 +411,7 @@ function DishCard({
   return (
     <div
       className={cn(
-        "relative flex gap-3 rounded-2xl bg-white border p-3.5 cursor-pointer",
+        "relative flex gap-3 rounded-2xl bg-cu-surface border p-3.5 cursor-pointer",
         "hover:border-cu-accent/30 hover:shadow-sm transition-all duration-200",
         warnings.length > 0 ? "border-red-200" : "border-cu-border"
       )}
@@ -691,7 +691,7 @@ export default function CustomerMenuPage() {
                   "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition-all",
                   vegOnly
                     ? "bg-cu-green text-white border-cu-green"
-                    : "bg-white border-cu-border text-cu-muted hover:border-cu-green/50"
+                    : "bg-cu-surface border-cu-border text-cu-muted hover:border-cu-green/50"
                 )}
               >
                 <Leaf size={12} />
@@ -709,7 +709,7 @@ export default function CustomerMenuPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search dishes…"
-                className="w-full rounded-2xl border border-cu-border bg-white py-2.5 pl-9 pr-10 text-sm text-cu-text placeholder:text-cu-muted/60 focus:border-cu-accent focus:outline-none focus:ring-2 focus:ring-cu-accent/15"
+                className="w-full rounded-2xl border border-cu-border bg-cu-surface py-2.5 pl-9 pr-10 text-sm text-cu-text placeholder:text-cu-muted/60 focus:border-cu-accent focus:outline-none focus:ring-2 focus:ring-cu-accent/15"
               />
               {search && (
                 <button
@@ -739,7 +739,7 @@ export default function CustomerMenuPage() {
                   "shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all",
                   activeCategory === tab.id
                     ? "bg-cu-accent text-white shadow-sm"
-                    : "bg-white border border-cu-border text-cu-muted hover:border-cu-accent/40 hover:text-cu-text"
+                    : "bg-cu-surface border border-cu-border text-cu-muted hover:border-cu-accent/40 hover:text-cu-text"
                 )}
               >
                 {tab.label}

@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-[#F0E8D6]"
+          ? "bg-[#131313]/95 backdrop-blur-md shadow-sm border-b border-[#2A2A2A]"
           : "bg-transparent"
       }`}
     >
@@ -62,16 +62,16 @@ export default function Navbar() {
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-[#8B7355] hover:text-[#1B2A4A] transition-colors font-medium">
+            <a href="#features" className="text-sm text-[#AD897E] hover:text-[#FAF6ED] transition-colors font-medium">
               Features
             </a>
-            <a href="#how-it-works" className="text-sm text-[#8B7355] hover:text-[#1B2A4A] transition-colors font-medium">
+            <a href="#how-it-works" className="text-sm text-[#AD897E] hover:text-[#FAF6ED] transition-colors font-medium">
               How It Works
             </a>
-            <a href="#testimonials" className="text-sm text-[#8B7355] hover:text-[#1B2A4A] transition-colors font-medium">
+            <a href="#testimonials" className="text-sm text-[#AD897E] hover:text-[#FAF6ED] transition-colors font-medium">
               Reviews
             </a>
-            <a href="#trial" className="text-sm text-[#8B7355] hover:text-[#1B2A4A] transition-colors font-medium">
+            <a href="#trial" className="text-sm text-[#AD897E] hover:text-[#FAF6ED] transition-colors font-medium">
               Free Trial
             </a>
           </div>
@@ -80,13 +80,13 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <Link
               href="/auth/login"
-              className="text-sm text-[#8B7355] hover:text-[#1B2A4A] transition-colors px-3 py-2 font-medium"
+              className="text-sm text-[#AD897E] hover:text-[#FAF6ED] transition-colors px-3 py-2 font-medium"
             >
               Log in
             </Link>
             <Link
               href="/auth/signup"
-              className="inline-flex items-center h-9 px-4 text-sm font-semibold rounded-lg bg-[#C6A34E] text-[#1B2A4A] hover:bg-[#A8873A] hover:text-white transition-colors shadow-sm"
+              className="inline-flex items-center h-9 px-4 text-sm font-semibold rounded-lg bg-[#C6A34E] text-[#FAF6ED] hover:bg-[#A8873A] hover:text-white transition-colors shadow-sm"
             >
               Get Started Free
             </Link>
@@ -95,7 +95,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-[#1B2A4A] hover:bg-[#F0E8D6] transition-colors"
+            className="md:hidden p-2 rounded-lg text-[#FAF6ED] hover:bg-[#1A1A1A] transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -112,27 +112,27 @@ export default function Navbar() {
               exit={prefersReduced ? undefined : { opacity: 0, y: -8, scaleY: 0.96 }}
               transition={{ duration: 0.2, ease: EASING.spring }}
               style={{ transformOrigin: "top" }}
-              className="md:hidden border-t border-[#F0E8D6] bg-white/98 backdrop-blur-md py-4 flex flex-col gap-1"
+              className="md:hidden border-t border-[#2A2A2A] bg-[#131313]/98 backdrop-blur-md py-4 flex flex-col gap-1"
             >
-              <a href="#features" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#1B2A4A] hover:bg-[#FAF6ED] rounded-lg">
+              <a href="#features" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#FAF6ED] hover:bg-[#0A0A0A] rounded-lg">
                 Features
               </a>
-              <a href="#how-it-works" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#1B2A4A] hover:bg-[#FAF6ED] rounded-lg">
+              <a href="#how-it-works" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#FAF6ED] hover:bg-[#0A0A0A] rounded-lg">
                 How It Works
               </a>
-              <a href="#testimonials" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#1B2A4A] hover:bg-[#FAF6ED] rounded-lg">
+              <a href="#testimonials" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#FAF6ED] hover:bg-[#0A0A0A] rounded-lg">
                 Reviews
               </a>
-              <a href="#trial" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#1B2A4A] hover:bg-[#FAF6ED] rounded-lg">
+              <a href="#trial" onClick={() => setMobileOpen(false)} className="px-4 py-2.5 text-sm font-medium text-[#FAF6ED] hover:bg-[#0A0A0A] rounded-lg">
                 Free Trial
               </a>
-              <div className="mt-3 pt-3 border-t border-[#F0E8D6] flex flex-col gap-2 px-4">
-                <Link href="/auth/login" className="py-2.5 text-sm text-center text-[#8B7355] hover:text-[#1B2A4A] font-medium">
+              <div className="mt-3 pt-3 border-t border-[#2A2A2A] flex flex-col gap-2 px-4">
+                <Link href="/auth/login" className="py-2.5 text-sm text-center text-[#AD897E] hover:text-[#FAF6ED] font-medium">
                   Log in
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="inline-flex items-center justify-center h-11 px-4 text-sm font-semibold rounded-lg bg-[#C6A34E] text-[#1B2A4A] hover:bg-[#A8873A] hover:text-white transition-colors"
+                  className="inline-flex items-center justify-center h-11 px-4 text-sm font-semibold rounded-lg bg-[#C6A34E] text-[#FAF6ED] hover:bg-[#A8873A] hover:text-white transition-colors"
                 >
                   Get Started Free
                 </Link>

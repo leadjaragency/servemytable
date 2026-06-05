@@ -206,7 +206,7 @@ function RestaurantDropdown({
             <DropdownMenu.Item asChild>
               <Link
                 href="/admin/settings"
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ra-muted hover:bg-slate-100 hover:text-ra-text transition-colors outline-none cursor-pointer"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ra-muted hover:bg-white/5 hover:text-ra-text transition-colors outline-none cursor-pointer"
               >
                 <Settings className="h-4 w-4" />
                 {tNav("settings")}
@@ -215,7 +215,7 @@ function RestaurantDropdown({
             <DropdownMenu.Item asChild>
               <Link
                 href="/admin/analytics"
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ra-muted hover:bg-slate-100 hover:text-ra-text transition-colors outline-none cursor-pointer"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ra-muted hover:bg-white/5 hover:text-ra-text transition-colors outline-none cursor-pointer"
               >
                 <BarChart2 className="h-4 w-4" />
                 {tNav("analytics")}
@@ -340,13 +340,14 @@ function SidebarContent({
     <div
       className="flex h-full flex-col"
       style={{
-        background: "#1E3A5F",
-        // Override ra-* tokens so Tailwind classes render correctly on the dark navy sidebar
-        ["--color-ra-text" as string]:   "#FFFFFF",
-        ["--color-ra-muted" as string]:  "rgba(255,255,255,0.78)",
-        ["--color-ra-border" as string]: "rgba(255,255,255,0.15)",
-        ["--color-ra-bg" as string]:     "rgba(255,255,255,0.08)",
-        ["--color-ra-surface" as string]:"rgba(255,255,255,0.12)",
+        background: "linear-gradient(180deg, #131313 0%, #0A0A0A 100%)",
+        borderRight: "1px solid rgba(198,163,78,0.12)",
+        // Override ra-* tokens so Tailwind classes render correctly on the obsidian sidebar
+        ["--color-ra-text" as string]:   "#FAF6ED",
+        ["--color-ra-muted" as string]:  "rgba(250,246,237,0.62)",
+        ["--color-ra-border" as string]: "rgba(198,163,78,0.15)",
+        ["--color-ra-bg" as string]:     "rgba(255,255,255,0.05)",
+        ["--color-ra-surface" as string]:"rgba(255,255,255,0.08)",
       }}
     >
       {/* Logo / Restaurant Name with dropdown */}
@@ -418,7 +419,7 @@ export function AdminSidebar({
       <button
         onClick={() => setMobileOpen(true)}
         className="fixed left-4 top-3.5 z-50 flex h-8 w-8 items-center justify-center rounded-lg md:hidden"
-        style={{ background: "#1E3A5F", color: "#FFFFFF" }}
+        style={{ background: "#131313", color: "#FAF6ED", border: "1px solid rgba(198,163,78,0.18)" }}
         aria-label="Open menu"
       >
         <Menu className="h-5 w-5" />

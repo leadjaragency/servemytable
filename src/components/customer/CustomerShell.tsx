@@ -79,7 +79,7 @@ function ErrorScreen({ message }: { message: string }) {
       </div>
       <button
         onClick={() => window.location.reload()}
-        className="flex items-center gap-2 rounded-xl border border-cu-border bg-white px-4 py-2 text-sm font-medium text-cu-text shadow-sm hover:bg-cu-bg transition-colors"
+        className="flex items-center gap-2 rounded-xl border border-cu-border bg-cu-surface px-4 py-2 text-sm font-medium text-cu-text shadow-sm hover:bg-white/5 transition-colors"
       >
         <RefreshCw className="h-4 w-4" />
         Try again

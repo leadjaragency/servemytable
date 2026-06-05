@@ -68,7 +68,7 @@ export default async function SuperAdminSettingsPage() {
                       <span key={key} className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${
                         val === true
                           ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                          : "border-slate-200 bg-slate-50 text-slate-500"
+                          : "border-sa-border bg-white/5 text-sa-muted"
                       }`}>
                         {key}
                       </span>

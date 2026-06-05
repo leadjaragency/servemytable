@@ -52,7 +52,7 @@ function StepsSection() {
           variants={prefersReduced ? undefined : fadeUp()}
           whileHover={prefersReduced ? undefined : { y: -4 }}
           transition={{ duration: 0.2 }}
-          className="group flex flex-col rounded-2xl overflow-hidden border border-[#F0E8D6] bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="group flex flex-col rounded-2xl overflow-hidden border border-[#2A2A2A] bg-[#131313] shadow-sm hover:shadow-md transition-shadow duration-200"
         >
           {/* Photo with step number overlay */}
           <div className="relative h-52 sm:h-56 overflow-hidden">
@@ -63,7 +63,7 @@ function StepsSection() {
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 95vw, (max-width: 1024px) 45vw, 33vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1B2A4A]/70 via-[#1B2A4A]/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/70 via-[#141414]/10 to-transparent" />
 
             {/* Step number */}
             <div className="absolute bottom-4 left-4 flex items-center gap-2">
@@ -81,7 +81,7 @@ function StepsSection() {
                 transition={{ delay: 0.4 + i * 0.3, duration: 0.4, ease: EASING.snappy }}
               >
                 <svg
-                  className="w-4 h-4 text-[#1B2A4A]"
+                  className="w-4 h-4 text-[#FAF6ED]"
                   fill="none"
                   viewBox="0 0 16 16"
                 >
@@ -102,8 +102,8 @@ function StepsSection() {
 
           {/* Text content */}
           <div className="p-6 flex flex-col flex-1">
-            <h3 className="font-display text-xl text-[#1B2A4A] mb-2">{step.title}</h3>
-            <p className="text-sm text-[#8B7355] leading-relaxed flex-1">{step.description}</p>
+            <h3 className="font-display text-xl text-[#FAF6ED] mb-2">{step.title}</h3>
+            <p className="text-sm text-[#AD897E] leading-relaxed flex-1">{step.description}</p>
           </div>
         </motion.div>
       ))}
@@ -115,7 +115,7 @@ export default function HowItWorksSection() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="how-it-works" className="py-20 bg-[#FAF6ED]">
+    <section id="how-it-works" className="py-20 bg-[#0A0A0A]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -129,7 +129,7 @@ export default function HowItWorksSection() {
             How It Works
           </motion.p>
           <motion.h2
-            className="font-display text-4xl md:text-5xl text-[#1B2A4A] mb-4"
+            className="font-display text-4xl md:text-5xl text-[#FAF6ED] mb-4"
             variants={prefersReduced ? undefined : fadeUp(0.1)}
             initial="hidden"
             animate="visible"
@@ -137,7 +137,7 @@ export default function HowItWorksSection() {
             Three steps. Thirty minutes. Done.
           </motion.h2>
           <motion.p
-            className="text-[#8B7355] text-base md:text-lg max-w-xl mx-auto leading-relaxed"
+            className="text-[#AD897E] text-base md:text-lg max-w-xl mx-auto leading-relaxed"
             variants={prefersReduced ? undefined : fadeUp(0.2)}
             initial="hidden"
             animate="visible"
@@ -150,7 +150,7 @@ export default function HowItWorksSection() {
 
         {/* Bottom trust note */}
         <AnimatedSection className="text-center mt-10" variants={scaleIn(0.2)}>
-          <p className="text-sm text-[#8B7355]">
+          <p className="text-sm text-[#AD897E]">
             <span className="text-[#C6A34E] font-semibold">Setup takes under 30 minutes.</span>{" "}
             No hardware. No IT department. Just your menu and a printer.
           </p>

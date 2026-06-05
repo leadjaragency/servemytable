@@ -80,7 +80,7 @@ export default function ReviewPage() {
   return (
     <div className="min-h-dvh bg-cu-bg pb-32">
       {/* Header */}
-      <header className="border-b border-cu-border bg-white/95 px-4 py-3">
+      <header className="border-b border-cu-border bg-[#131313]/95 px-4 py-3">
         <h1 className="font-display text-lg font-bold text-cu-text text-center">Leave a Review</h1>
         <p className="text-center text-xs text-cu-text/40 mt-0.5">How was your experience?</p>
       </header>
@@ -148,7 +148,7 @@ export default function ReviewPage() {
             maxLength={500}
             rows={3}
             placeholder="Tell us what you loved or what we can improve…"
-            className="w-full resize-none rounded-2xl border border-cu-border bg-white px-4 py-3 text-sm text-cu-text placeholder:text-cu-text/40 focus:border-cu-accent/50 focus:outline-none"
+            className="w-full resize-none rounded-2xl border border-cu-border bg-cu-surface px-4 py-3 text-sm text-cu-text placeholder:text-cu-text/40 focus:border-cu-accent/50 focus:outline-none"
           />
           <p className="text-right text-xs text-cu-text/30">{comment.length}/500</p>
         </div>

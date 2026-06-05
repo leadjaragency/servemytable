@@ -11,12 +11,12 @@ export default function CTASection() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[#131313]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection
           variants={prefersReduced ? undefined : scaleIn()}
           threshold={0.2}
-          className={`relative bg-[#1B2A4A] rounded-3xl overflow-hidden px-8 py-16 sm:px-14 sm:py-20 text-center${prefersReduced ? "" : " animate-gold-glow"}`}
+          className={`relative bg-[#141414] rounded-3xl overflow-hidden px-8 py-16 sm:px-14 sm:py-20 text-center${prefersReduced ? "" : " animate-gold-glow"}`}
         >
           {/* Background glow blobs — animated scale+opacity loop */}
           <motion.div
@@ -79,7 +79,7 @@ export default function CTASection() {
               >
                 <Link
                   href="/auth/signup"
-                  className="inline-flex items-center gap-2 h-12 px-8 text-base font-bold uppercase tracking-wider rounded-xl bg-[#C6A34E] text-[#1B2A4A] hover:bg-[#A8873A] hover:text-white transition-colors shadow-lg"
+                  className="inline-flex items-center gap-2 h-12 px-8 text-base font-bold uppercase tracking-wider rounded-xl bg-[#C6A34E] text-[#FAF6ED] hover:bg-[#A8873A] hover:text-white transition-colors shadow-lg"
                 >
                   Get Started Free
                   <ArrowRight className="w-4 h-4" />
@@ -114,28 +114,28 @@ export default function CTASection() {
         <AnimatedSection
           variants={prefersReduced ? undefined : fadeUp()}
           threshold={0.2}
-          className="mt-8 rounded-3xl border border-[#F0E8D6] bg-[#FAF6ED] px-8 py-10 text-center"
+          className="mt-8 rounded-3xl border border-[#2A2A2A] bg-[#0A0A0A] px-8 py-10 text-center"
         >
           <p className="text-[#C6A34E] text-[11px] font-semibold uppercase tracking-[3px] mb-2">
             No sign-up needed
           </p>
-          <h3 className="font-display text-3xl sm:text-4xl text-[#1B2A4A] mb-2 leading-none">
+          <h3 className="font-display text-3xl sm:text-4xl text-[#FAF6ED] mb-2 leading-none">
             Try the live demo
           </h3>
-          <p className="text-[#8B7355] text-sm mb-7 max-w-md mx-auto">
+          <p className="text-[#AD897E] text-sm mb-7 max-w-md mx-auto">
             Explore both sides of ServeMyTable instantly — see what your guests see, and what you&apos;d manage.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/table/1?restaurant=saffron-palace"
-              className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#C6A34E] text-[#1B2A4A] hover:bg-[#A8873A] hover:text-white transition-colors shadow-md"
+              className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#C6A34E] text-[#FAF6ED] hover:bg-[#A8873A] hover:text-white transition-colors shadow-md"
             >
               <Smartphone className="w-4 h-4" />
               Customer Experience
             </Link>
             <Link
               href="/api/demo/enter"
-              className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#1B2A4A] text-white hover:bg-[#2A3D66] transition-colors shadow-md"
+              className="inline-flex items-center gap-2 h-12 px-6 text-base font-semibold rounded-xl bg-[#141414] text-white hover:bg-[#2A3D66] transition-colors shadow-md"
             >
               <Monitor className="w-4 h-4" />
               Admin Dashboard

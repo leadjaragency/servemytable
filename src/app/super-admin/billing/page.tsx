@@ -57,10 +57,10 @@ async function getData() {
 function statusBadge(status: string) {
   switch (status) {
     case "active":    return "border-emerald-200 bg-emerald-50 text-emerald-700";
-    case "pending":   return "border-amber-200 bg-amber-50 text-amber-700";
+    case "pending":   return "border-amber-200 bg-amber-500/15 text-amber-700";
     case "suspended": return "border-red-200 bg-red-50 text-red-600";
-    case "disabled":  return "border-slate-200 bg-slate-50 text-slate-500";
-    default:          return "border-slate-200 bg-slate-50 text-slate-500";
+    case "disabled":  return "border-sa-border bg-white/5 text-sa-muted";
+    default:          return "border-sa-border bg-white/5 text-sa-muted";
   }
 }
 
@@ -85,7 +85,7 @@ export default async function BillingPage() {
             value: `$${platformTotal.toFixed(2)}`,
             sub:   "subscriptions + API",
             icon:  DollarSign,
-            color: "bg-blue-50 text-blue-600",
+            color: "bg-blue-500/15 text-blue-600",
           },
           {
             label: "Active Restaurants",
@@ -97,7 +97,7 @@ export default async function BillingPage() {
             label: "Subscription Revenue",
             value: `$${rows.reduce((s: number, r: { monthlyPrice: number }) => s + r.monthlyPrice, 0).toFixed(2)}`,
             icon:  DollarSign,
-            color: "bg-indigo-50 text-indigo-600",
+            color: "bg-sa-accent/10 text-sa-accent",
           },
           {
             label: "API Cost This Month",
@@ -164,7 +164,7 @@ export default async function BillingPage() {
             </thead>
             <tbody className="divide-y divide-sa-border">
               {rows.map((row: { id: string; name: string; slug: string; status: string; tierName: string; monthlyPrice: number; apiCostMonth: number; totalRevenue: number; orderCount: number }) => (
-                <tr key={row.id} className="hover:bg-slate-50 transition-colors">
+                <tr key={row.id} className="hover:bg-white/5 transition-colors">
                   <td className="px-4 py-3">
                     <Link href={`/super-admin/restaurants/${row.id}`} className="font-medium text-sa-text hover:text-sa-accent transition-colors">
                       {row.name}
