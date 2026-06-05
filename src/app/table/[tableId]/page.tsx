@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useCustomer } from "@/lib/CustomerContext";
 import { Loader2, Utensils } from "lucide-react";
@@ -17,40 +17,54 @@ export default function TableSplashPage() {
 
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
 
-  // Once context resolves, create the session + start the 3-second redirect timer
+  // Guard so the session is created and the redirect is scheduled exactly once.
+  // The public-demo restaurant mints a fresh session on every POST /api/sessions,
+  // and setSessionId triggers a context refetch that returns new restaurant/table
+  // object references — without this guard the effect would re-run, spawn endless
+  // sessions, and keep clearing the redirect timer (splash gets stuck forever).
+  const startedRef = useRef(false);
+
+  // Once context resolves, create the session + start the redirect timer (once).
   useEffect(() => {
     if (loading) return;
     if (error || !restaurant || !table) { setPhase("error"); return; }
 
     setPhase("ready");
 
-    // Create table session — fire-and-forget; timer runs regardless of outcome
-    fetch("/api/sessions", {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({
-        restaurantSlug: restaurant.slug,
-        tableNumber:    table.number,
-      }),
-    })
-      .then((r) => r.json())
-      .then((data: { sessionId?: string }) => {
-        if (data.sessionId) setSessionId(data.sessionId);
+    // Create the table session only once (guarded). The redirect timer below is
+    // intentionally NOT guarded so it re-arms after React StrictMode's dev
+    // re-invoke (which clears the first timer) and after any context refetch.
+    if (!startedRef.current) {
+      startedRef.current = true;
+      // Create table session — fire-and-forget; timer runs regardless of outcome
+      fetch("/api/sessions", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+          restaurantSlug: restaurant.slug,
+          tableNumber:    table.number,
+        }),
       })
-      .catch(() => {
-        // Non-fatal — customer can still browse
-      });
+        .then((r) => r.json())
+        .then((data: { sessionId?: string }) => {
+          if (data.sessionId) setSessionId(data.sessionId);
+        })
+        .catch(() => {
+          // Non-fatal — customer can still browse
+        });
+    }
 
-    // Always redirect to chat after 3 seconds
+    // Redirect to chat shortly after the branded splash.
     const redirectTimer = setTimeout(() => {
       router.push(
         `/table/${params.tableId}/chat?restaurant=${encodeURIComponent(restaurantSlug)}`
       );
-    }, 3000);
+    }, 1800);
 
     return () => clearTimeout(redirectTimer);
+    // Depend on stable ids (not object refs) so context refetches don't re-run this.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, error, restaurant, table]);
+  }, [loading, error, restaurant?.id, table?.id]);
 
   // ── Error state ─────────────────────────────────────────────────────────
   if (phase === "error") {

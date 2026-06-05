@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Clock, AlertTriangle, ChefHat, Wifi, RefreshCw } from "lucide-react";
+import { Clock, AlertTriangle, ChefHat, RefreshCw } from "lucide-react";
 import { cn, formatTimeAgo } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -45,9 +45,9 @@ interface KitchenBoardProps {
 // ---------------------------------------------------------------------------
 
 const COLUMNS = [
-  { status: "received", label: "New Orders", accent: "#3B82F6", next: "preparing", nextLabel: "Start Preparing" },
-  { status: "preparing", label: "Preparing", accent: "#F59E0B", next: "ready", nextLabel: "Mark Ready" },
-  { status: "ready", label: "Ready to Serve", accent: "#22C55E", next: "served", nextLabel: "Mark Served" },
+  { status: "received", label: "New Orders", accent: "#6E8BD6", next: "preparing", nextLabel: "Start Preparing" },
+  { status: "preparing", label: "On the Fire", accent: "#FF4D00", next: "ready", nextLabel: "Mark Ready" },
+  { status: "ready", label: "Ready to Serve", accent: "#2FB463", next: "served", nextLabel: "Mark Served" },
 ] as const;
 
 const ALLERGEN_KEYWORDS = [
@@ -93,19 +93,23 @@ function OrderCard({
 
   return (
     <div
-      className="rounded-xl overflow-hidden shadow-lg"
-      style={{ background: "#1C1917", border: "1px solid #44403C" }}
+      className="rounded-xl overflow-hidden"
+      style={{
+        background: "#161616",
+        border: "1px solid #262626",
+        boxShadow: "0 18px 40px -16px rgba(0,0,0,0.8)",
+      }}
     >
-      <div className="h-1.5" style={{ background: accent }} />
+      <div className="h-[3px]" style={{ background: accent, boxShadow: `0 0 14px ${accent}99` }} />
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-baseline gap-2">
-            <span className="font-display text-3xl leading-none text-white">
+            <span className="font-display text-3xl leading-none" style={{ color: "#FAF6ED" }}>
               T{order.table.number}
             </span>
-            <span className="text-xs font-mono text-stone-400">#{order.orderNumber}</span>
+            <span className="text-xs font-mono" style={{ color: "#7C736D" }}>#{order.orderNumber}</span>
           </div>
-          <span className="flex items-center gap-1 text-xs text-stone-400">
+          <span className="flex items-center gap-1 text-xs" style={{ color: "#AD897E" }}>
             <Clock className="h-3.5 w-3.5" />
             {formatTimeAgo(order.createdAt)}
           </span>
@@ -113,10 +117,10 @@ function OrderCard({
 
         <ul className="space-y-1.5 mb-3">
           {order.items.map((item) => (
-            <li key={item.id} className="flex items-start gap-2 text-stone-100">
+            <li key={item.id} className="flex items-start gap-2" style={{ color: "#EAE4DB" }}>
               <span
                 className="flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-sm font-bold"
-                style={{ background: "rgba(198,163,78,0.15)", color: "#C6A34E" }}
+                style={{ background: "rgba(198,163,78,0.14)", color: "#E8C269", border: "1px solid rgba(198,163,78,0.25)" }}
               >
                 {item.quantity}
               </span>
@@ -125,7 +129,7 @@ function OrderCard({
                 {item.dish.name}
               </span>
               {item.specialInst ? (
-                <span className="text-xs italic text-stone-400 leading-6">— {item.specialInst}</span>
+                <span className="text-xs italic leading-6" style={{ color: "#AD897E" }}>— {item.specialInst}</span>
               ) : null}
             </li>
           ))}
@@ -134,15 +138,15 @@ function OrderCard({
         {order.specialNotes ? (
           <div
             className={cn(
-              "flex items-start gap-2 rounded-lg px-3 py-2 mb-3 text-sm",
-              allergenNote ? "text-red-200" : "text-stone-300"
+              "flex items-start gap-2 rounded-lg px-3 py-2 mb-3 text-sm"
             )}
             style={{
-              background: allergenNote ? "rgba(192,69,37,0.18)" : "rgba(255,255,255,0.04)",
-              border: allergenNote ? "1px solid rgba(239,68,68,0.4)" : "1px solid #44403C",
+              background: allergenNote ? "rgba(255,77,0,0.12)" : "rgba(255,255,255,0.04)",
+              border: allergenNote ? "1px solid rgba(255,77,0,0.45)" : "1px solid #262626",
+              color: allergenNote ? "#FFB4AB" : "#C9C2B9",
             }}
           >
-            {allergenNote ? <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-red-400" /> : null}
+            {allergenNote ? <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" style={{ color: "#FF6A33" }} /> : null}
             <span>{order.specialNotes}</span>
           </div>
         ) : null}
@@ -150,8 +154,12 @@ function OrderCard({
         <button
           onClick={onAdvance}
           disabled={busy}
-          className="w-full rounded-lg py-3 text-base font-bold text-stone-900 transition-opacity hover:opacity-90 disabled:opacity-50"
-          style={{ background: accent }}
+          className="w-full rounded-lg py-3 text-base font-semibold tracking-wide transition-all hover:brightness-110 disabled:opacity-50"
+          style={{
+            background: accent,
+            color: "#0A0A0A",
+            boxShadow: `0 8px 22px -8px ${accent}88`,
+          }}
         >
           {busy ? "…" : nextLabel}
         </button>
@@ -229,34 +237,38 @@ export function KitchenBoard({ token, restaurantName, initialOrders }: KitchenBo
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "#0C0A09" }}>
+    <div className="min-h-screen" style={{ background: "#0A0A0A" }}>
       {/* Header */}
       <header
-        className="sticky top-0 z-10 flex items-center justify-between px-6 py-4"
-        style={{ background: "#1C1917", borderBottom: "1px solid #44403C" }}
+        className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 backdrop-blur-md"
+        style={{ background: "rgba(19,19,19,0.92)", borderBottom: "1px solid #242424" }}
       >
         <div className="flex items-center gap-3">
           <div
             className="flex h-10 w-10 items-center justify-center rounded-xl"
-            style={{ background: "rgba(198,163,78,0.15)" }}
+            style={{ background: "rgba(198,163,78,0.12)", border: "1px solid rgba(198,163,78,0.25)" }}
           >
             <ChefHat className="h-5 w-5" style={{ color: "#C6A34E" }} />
           </div>
           <div>
-            <h1 className="font-display text-2xl leading-none text-white uppercase tracking-wide">
+            <h1 className="font-display text-2xl leading-none" style={{ color: "#FAF6ED" }}>
               Kitchen Display
             </h1>
-            <p className="text-xs text-stone-400">{restaurantName}</p>
+            <p className="text-xs font-medium tracking-wide" style={{ color: "#AD897E" }}>{restaurantName}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <span className="hidden sm:flex items-center gap-1.5 text-xs text-green-400">
-            <Wifi className="h-3.5 w-3.5" />
+          <span className="hidden sm:flex items-center gap-1.5 text-xs font-medium" style={{ color: "#2FB463" }}>
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping" style={{ background: "#2FB463" }} />
+              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: "#2FB463" }} />
+            </span>
             Live · auto-refresh
           </span>
           <button
             onClick={manualRefresh}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-stone-300 transition-colors hover:bg-white/10"
+            className="flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:bg-white/5"
+            style={{ color: "#AD897E", border: "1px solid #242424" }}
             title="Refresh"
           >
             <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} />
@@ -274,14 +286,14 @@ export function KitchenBoard({ token, restaurantName, initialOrders }: KitchenBo
             <section key={col.status} className="flex flex-col">
               <div className="flex items-center justify-between mb-3 px-1">
                 <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full" style={{ background: col.accent }} />
-                  <h2 className="text-sm font-bold uppercase tracking-wider text-stone-200">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: col.accent, boxShadow: `0 0 10px ${col.accent}99` }} />
+                  <h2 className="text-sm font-bold uppercase tracking-[0.12em]" style={{ color: "#EAE4DB" }}>
                     {col.label}
                   </h2>
                 </div>
                 <span
-                  className="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-bold text-stone-900"
-                  style={{ background: col.accent }}
+                  className="flex h-6 min-w-6 items-center justify-center rounded-full px-2 text-xs font-bold"
+                  style={{ background: col.accent, color: "#0A0A0A" }}
                 >
                   {colOrders.length}
                 </span>
@@ -289,8 +301,8 @@ export function KitchenBoard({ token, restaurantName, initialOrders }: KitchenBo
               <div className="space-y-3">
                 {colOrders.length === 0 ? (
                   <div
-                    className="rounded-xl py-10 text-center text-sm text-stone-500"
-                    style={{ border: "1px dashed #44403C" }}
+                    className="rounded-xl py-10 text-center text-sm"
+                    style={{ border: "1px dashed #262626", color: "#5C5650" }}
                   >
                     No orders
                   </div>
