@@ -772,7 +772,7 @@ function TableSlideOver({
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 opacity-50 hover:opacity-100 hover:bg-slate-100 transition-all"
+            className="rounded-lg p-2 opacity-50 hover:opacity-100 hover:bg-white/5 transition-all"
           >
             <X size={18} />
           </button>
@@ -998,14 +998,14 @@ function TableSlideOver({
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href="/admin/qr-codes"
-                className="flex items-center gap-2 rounded-xl border border-ra-border bg-ra-bg px-4 py-3 text-sm text-ra-text hover:border-ra-accent/40 hover:bg-slate-100 transition-colors"
+                className="flex items-center gap-2 rounded-xl border border-ra-border bg-ra-bg px-4 py-3 text-sm text-ra-text hover:border-ra-accent/40 hover:bg-white/5 transition-colors"
               >
                 <QrCode size={15} className="text-ra-muted" />
                 QR Codes
               </Link>
               <Link
                 href="/admin/orders"
-                className="flex items-center gap-2 rounded-xl border border-ra-border bg-ra-bg px-4 py-3 text-sm text-ra-text hover:border-ra-accent/40 hover:bg-slate-100 transition-colors"
+                className="flex items-center gap-2 rounded-xl border border-ra-border bg-ra-bg px-4 py-3 text-sm text-ra-text hover:border-ra-accent/40 hover:bg-white/5 transition-colors"
               >
                 <Utensils size={15} className="text-ra-muted" />
                 Live Orders
@@ -1198,14 +1198,14 @@ function TableCard({
           <Link
             href="/admin/qr-codes"
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-ra-muted hover:bg-slate-100 hover:text-ra-text transition-colors"
+            className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-ra-muted hover:bg-white/5 hover:text-ra-text transition-colors"
           >
             <QrCode size={11} /> QR
           </Link>
           {!isMergedSecondary && (
             <button
               onClick={(e) => { e.stopPropagation(); onSelect(table); }}
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-ra-muted hover:bg-slate-100 hover:text-ra-text transition-colors"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-ra-muted hover:bg-white/5 hover:text-ra-text transition-colors"
             >
               <MessageSquare size={11} /> Chat log
             </button>
@@ -1345,7 +1345,7 @@ export function TablesPageClient({ tables: initialTables, waiters, restaurantSlu
           <button
             onClick={handleManualRefresh}
             className={cn(
-              "rounded-lg p-2 text-ra-muted hover:bg-slate-100 hover:text-ra-text transition-all",
+              "rounded-lg p-2 text-ra-muted hover:bg-white/5 hover:text-ra-text transition-all",
               refreshing && "animate-spin text-ra-accent"
             )}
             title="Refresh"
@@ -1381,7 +1381,7 @@ export function TablesPageClient({ tables: initialTables, waiters, restaurantSlu
               "flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all",
               filter === key
                 ? "bg-ra-accent text-stone-900"
-                : "text-ra-muted hover:bg-slate-100 hover:text-ra-text"
+                : "text-ra-muted hover:bg-white/5 hover:text-ra-text"
             )}
           >
             {label}

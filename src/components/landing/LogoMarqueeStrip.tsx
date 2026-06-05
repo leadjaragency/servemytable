@@ -17,7 +17,7 @@ const items = [
 
 export default function LogoMarqueeStrip() {
   return (
-    <div className="bg-[#1B2A4A] overflow-hidden py-4 border-y border-white/5">
+    <div className="bg-[#141414] overflow-hidden py-4 border-y border-white/5">
       <div className="flex items-center">
         {/* Static label — pinned left, non-scrolling */}
         <span className="shrink-0 text-[10px] font-semibold uppercase tracking-[3px] text-white/30 pl-6 pr-5 border-r border-white/10 mr-6 whitespace-nowrap hidden sm:block">

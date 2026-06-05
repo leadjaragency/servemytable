@@ -92,7 +92,7 @@ function BarChart({ labels, values }: { labels: string[]; values: number[] }) {
         const hasValue = values[i] > 0;
         return (
           <div key={label} className="flex flex-1 flex-col items-center gap-1.5">
-            <span className="text-[10px] font-medium leading-none" style={{ color: "#64748B" }}>
+            <span className="text-[10px] font-medium leading-none" style={{ color: "#AD897E" }}>
               {hasValue ? `$${values[i].toFixed(0)}` : ""}
             </span>
             <div
@@ -100,8 +100,8 @@ function BarChart({ labels, values }: { labels: string[]; values: number[] }) {
               style={{
                 height: `${pct}%`,
                 background: hasValue
-                  ? "linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%)"
-                  : "#F1F5F9",
+                  ? "linear-gradient(180deg, #FF4D00 0%, #1D4ED8 100%)"
+                  : "#201F1F",
                 minHeight: "4px",
               }}
             />
@@ -133,9 +133,9 @@ export default async function SuperAdminAnalyticsPage() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {[
           { label: "Active",       value: restaurants.active,                                icon: Building2,     color: "bg-emerald-50 text-emerald-600" },
-          { label: "Orders Today", value: ordersToday,                                       icon: ShoppingBag,   color: "bg-blue-50 text-blue-600" },
-          { label: "Revenue Today",value: `$${revenueToday.toFixed(0)}`,                    icon: DollarSign,    color: "bg-indigo-50 text-indigo-600" },
-          { label: "Avg Rating",   value: avgRating > 0 ? avgRating.toFixed(1) : "—",      icon: Star,          color: "bg-amber-50 text-amber-600" },
+          { label: "Orders Today", value: ordersToday,                                       icon: ShoppingBag,   color: "bg-blue-500/15 text-blue-600" },
+          { label: "Revenue Today",value: `$${revenueToday.toFixed(0)}`,                    icon: DollarSign,    color: "bg-sa-accent/10 text-sa-accent" },
+          { label: "Avg Rating",   value: avgRating > 0 ? avgRating.toFixed(1) : "—",      icon: Star,          color: "bg-amber-500/15 text-amber-600" },
           { label: "AI Chats",     value: aiChatsToday,                                      icon: MessageSquare, color: "bg-violet-50 text-violet-600" },
           { label: "Game Wins",    value: gameWinsTotal,                                     icon: Gamepad2,      color: "bg-pink-50 text-pink-600" },
         ].map(({ label, value, icon: Icon, color }) => (
@@ -190,8 +190,8 @@ export default async function SuperAdminAnalyticsPage() {
                 <p className="font-medium text-sa-text truncate">{r.name}</p>
                 <span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase ${
                   r.status === "active" ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : r.status === "pending" ? "border-amber-200 bg-amber-50 text-amber-700"
-                    : "border-slate-200 bg-slate-50 text-slate-500"
+                    : r.status === "pending" ? "border-amber-200 bg-amber-500/15 text-amber-700"
+                    : "border-sa-border bg-white/5 text-sa-muted"
                 }`}>
                   {r.status}
                 </span>

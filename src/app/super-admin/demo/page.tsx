@@ -28,9 +28,9 @@ export default async function SuperAdminDemoPage() {
     panel = (
       <div
         className="flex flex-col items-center justify-center rounded-2xl py-20 text-center"
-        style={{ background: "#FFFFFF", border: "1px dashed #CBD5E1" }}
+        style={{ background: "#1A1A1A", border: "1px dashed #2A2A2A" }}
       >
-        <QrCode className="h-10 w-10 mb-4" style={{ color: "#CBD5E1" }} />
+        <QrCode className="h-10 w-10 mb-4" style={{ color: "#2A2A2A" }} />
         <p className="text-sm font-medium text-sa-muted">No demo restaurant configured</p>
         <p className="mt-1 text-xs text-sa-muted">
           Flag a restaurant with <code>isPublicDemo = true</code> to enable open demo access.
@@ -62,9 +62,9 @@ export default async function SuperAdminDemoPage() {
       <div className="flex items-center gap-3 mb-8">
         <div
           className="flex h-10 w-10 items-center justify-center rounded-xl"
-          style={{ background: "rgba(37,99,235,0.10)" }}
+          style={{ background: "rgba(255,77,0,0.10)" }}
         >
-          <QrCode className="h-5 w-5" style={{ color: "#2563EB" }} />
+          <QrCode className="h-5 w-5" style={{ color: "#FF4D00" }} />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-sa-text">Demo Access</h1>

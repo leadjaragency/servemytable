@@ -10,29 +10,30 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // Primary — Flame Orange, Parchment text, heat-glow on hover
         primary:
-          "bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus-visible:ring-indigo-500 shadow-sm",
+          "bg-[#FF4D00] text-[#FAF6ED] hover:bg-[#FF6A33] hover:shadow-[0_8px_24px_-4px_rgba(255,77,0,0.5)] active:bg-[#C23A00] focus-visible:ring-[#FF4D00]/50 shadow-sm font-semibold",
         secondary:
-          "bg-white/10 text-current hover:bg-white/20 active:bg-white/30 focus-visible:ring-white/50 border border-white/10",
+          "bg-white/5 text-current hover:bg-white/10 active:bg-white/15 focus-visible:ring-white/30 border border-white/10",
         outline:
-          "border border-current bg-transparent hover:bg-white/10 active:bg-white/20 focus-visible:ring-current",
+          "border border-current bg-transparent hover:bg-white/5 active:bg-white/10 focus-visible:ring-current",
         ghost:
-          "bg-transparent border border-white/20 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/30 active:bg-white/15 focus-visible:ring-white/30",
+          "bg-transparent border border-white/15 text-[#FAF6ED]/70 hover:bg-white/5 hover:text-[#FAF6ED] hover:border-white/25 active:bg-white/10 focus-visible:ring-white/20",
         danger:
-          "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus-visible:ring-red-500 shadow-sm",
-        // Brand Gold — primary action in modals
+          "bg-[#93000A] text-[#FFDAD6] hover:bg-[#B3000C] active:bg-[#690005] focus-visible:ring-[#FFB4AB]/50 shadow-sm",
+        // Champagne Gold — secondary premium action (transparent + gold border)
         amber:
-          "bg-[#C6A34E] text-white hover:bg-[#A8873A] active:bg-[#8F6F2E] focus-visible:ring-[#C6A34E]/50 shadow-sm font-semibold",
-        // Customer-zone warm accent
+          "bg-transparent text-[#C6A34E] border border-[#C6A34E] hover:bg-[#C6A34E]/10 active:bg-[#C6A34E]/15 focus-visible:ring-[#C6A34E]/50 font-semibold",
+        // Customer-zone warm accent — Flame Orange
         warm:
-          "bg-[#D4740E] text-white hover:bg-[#B85C0A] active:bg-[#9A4D09] focus-visible:ring-[#D4740E] shadow-sm",
+          "bg-[#FF4D00] text-[#FAF6ED] hover:bg-[#FF6A33] hover:shadow-[0_8px_24px_-4px_rgba(255,77,0,0.5)] active:bg-[#C23A00] focus-visible:ring-[#FF4D00] shadow-sm font-semibold",
       },
       size: {
-        sm: "h-8 px-3 text-xs rounded-md",
-        md: "h-10 px-4 text-sm rounded-lg",
-        lg: "h-12 px-6 text-base rounded-xl",
-        icon: "h-9 w-9 rounded-lg",
-        "icon-sm": "h-7 w-7 rounded-md",
+        sm: "h-8 px-3 text-xs rounded-sm",
+        md: "h-10 px-4 text-sm rounded-md",
+        lg: "h-12 px-6 text-base rounded-md",
+        icon: "h-9 w-9 rounded-md",
+        "icon-sm": "h-7 w-7 rounded-sm",
       },
     },
     defaultVariants: {

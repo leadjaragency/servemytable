@@ -16,7 +16,7 @@ export function TypingIndicator({ avatar }: TypingIndicatorProps) {
       </div>
 
       {/* Dots bubble */}
-      <div className="flex h-9 items-center gap-1.5 rounded-2xl rounded-bl-sm bg-white px-4 shadow-sm ring-1 ring-black/5">
+      <div className="flex h-9 items-center gap-1.5 rounded-2xl rounded-bl-sm bg-cu-surface px-4 shadow-sm ring-1 ring-white/8">
         <span
           className="h-2 w-2 rounded-full bg-cu-text/35 animate-bounce"
           style={{ animationDelay: "0ms", animationDuration: "900ms" }}

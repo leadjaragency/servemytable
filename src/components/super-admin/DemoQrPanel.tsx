@@ -48,18 +48,18 @@ function QrCard({ icon: Icon, badge, title, description, url, qr, filename }: Qr
   return (
     <div
       className="flex flex-col rounded-2xl p-6"
-      style={{ background: "#FFFFFF", border: "1px solid #E2E8F0" }}
+      style={{ background: "#1A1A1A", border: "1px solid #2A2A2A" }}
     >
       <div className="flex items-center gap-2 mb-4">
         <div
           className="flex h-8 w-8 items-center justify-center rounded-lg"
-          style={{ background: "rgba(37,99,235,0.10)" }}
+          style={{ background: "rgba(255,77,0,0.10)" }}
         >
-          <Icon className="h-4 w-4" style={{ color: "#2563EB" }} />
+          <Icon className="h-4 w-4" style={{ color: "#FF4D00" }} />
         </div>
         <span
           className="text-[10px] font-bold uppercase tracking-widest"
-          style={{ color: "#2563EB" }}
+          style={{ color: "#FF4D00" }}
         >
           {badge}
         </span>
@@ -69,7 +69,7 @@ function QrCard({ icon: Icon, badge, title, description, url, qr, filename }: Qr
       <p className="mt-1 text-sm text-sa-muted">{description}</p>
 
       <div className="mt-5 flex justify-center">
-        <div className="rounded-2xl p-3" style={{ background: "#F8FAFC", border: "1px solid #E2E8F0" }}>
+        <div className="rounded-2xl p-3" style={{ background: "#0A0A0A", border: "1px solid #2A2A2A" }}>
           <Image
             src={qr}
             alt={`${title} QR code`}
@@ -83,7 +83,7 @@ function QrCard({ icon: Icon, badge, title, description, url, qr, filename }: Qr
 
       <div
         className="mt-5 flex items-center gap-2 rounded-lg px-3 py-2 text-xs"
-        style={{ background: "#F8FAFC", border: "1px solid #E2E8F0", color: "#64748B" }}
+        style={{ background: "#0A0A0A", border: "1px solid #2A2A2A", color: "#AD897E" }}
       >
         <span className="truncate flex-1">{url}</span>
         <a
@@ -101,7 +101,7 @@ function QrCard({ icon: Icon, badge, title, description, url, qr, filename }: Qr
         <button
           onClick={() => downloadDataUrl(qr, filename)}
           className="flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-          style={{ background: "#2563EB" }}
+          style={{ background: "#FF4D00" }}
         >
           <Download className="h-4 w-4" />
           Download
@@ -109,7 +109,7 @@ function QrCard({ icon: Icon, badge, title, description, url, qr, filename }: Qr
         <button
           onClick={copyLink}
           className="flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors"
-          style={{ background: "#F1F5F9", color: "#0F172A", border: "1px solid #E2E8F0" }}
+          style={{ background: "#201F1F", color: "#FAF6ED", border: "1px solid #2A2A2A" }}
         >
           {copied ? <Check className="h-4 w-4" style={{ color: "#10B981" }} /> : <Copy className="h-4 w-4" />}
           {copied ? "Copied" : "Copy link"}
@@ -131,7 +131,7 @@ export function DemoQrPanel({
     <div>
       <div
         className="mb-6 flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
-        style={{ background: "rgba(37,99,235,0.06)", border: "1px solid rgba(37,99,235,0.15)", color: "#1E3A5F" }}
+        style={{ background: "rgba(255,77,0,0.06)", border: "1px solid rgba(255,77,0,0.15)", color: "#0E0E0E" }}
       >
         <span>
           Live demo restaurant: <strong>{restaurantName}</strong> — scanning either code opens it instantly with no

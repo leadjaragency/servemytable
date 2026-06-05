@@ -44,7 +44,7 @@ export function BottomNav({ tableId, restaurantSlug }: BottomNavProps) {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center border-t border-cu-border bg-white/95 backdrop-blur-md">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center border-t border-cu-border bg-[#131313]/95 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-[480px] items-center justify-around px-2">
         {NAV_ITEMS.map((item) => {
           const active = isActive(item.segment);

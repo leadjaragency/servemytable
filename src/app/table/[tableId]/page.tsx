@@ -72,7 +72,7 @@ export default function TableSplashPage() {
   // ── Context still loading ───────────────────────────────────────────────
   if (phase === "loading" || !restaurant || !table) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-[#2D1B0E] to-[#8B1A2B]">
+      <div className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-[#0A0A0A] via-[#171310] to-[#2A1206]">
         <Loader2 className="h-10 w-10 animate-spin text-white/60" />
       </div>
     );
@@ -80,7 +80,7 @@ export default function TableSplashPage() {
 
   // ── Full splash screen ──────────────────────────────────────────────────
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-8 bg-gradient-to-b from-[#2D1B0E] to-[#8B1A2B] px-8 text-center">
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-8 bg-gradient-to-b from-[#0A0A0A] via-[#171310] to-[#2A1206] px-8 text-center">
       {/* Restaurant initial badge */}
       <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 text-4xl font-bold text-white shadow-lg backdrop-blur-sm ring-1 ring-white/20">
         {restaurant.name.charAt(0)}

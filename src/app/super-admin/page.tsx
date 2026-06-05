@@ -142,8 +142,8 @@ function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor, borde
     <div
       className="rounded-xl p-5 flex flex-col gap-3 animate-fade-in"
       style={{
-        background: "#FFFFFF",
-        border: `1px solid #E2E8F0`,
+        background: "#1A1A1A",
+        border: `1px solid #2A2A2A`,
         borderTop: `3px solid ${borderColor}`,
         animationDelay: `${delay}ms`,
         animationFillMode: "both",
@@ -151,7 +151,7 @@ function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor, borde
       }}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#64748B" }}>
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#AD897E" }}>
           {title}
         </p>
         <div
@@ -161,7 +161,7 @@ function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor, borde
           <Icon className="h-4 w-4" style={{ color: iconColor }} />
         </div>
       </div>
-      <p className="text-3xl font-bold tabular-nums leading-none" style={{ color: "#0F172A" }}>
+      <p className="text-3xl font-bold tabular-nums leading-none" style={{ color: "#FAF6ED" }}>
         {value}
       </p>
       <p className="text-xs leading-snug" style={{ color: "#94A3B8" }}>{subtitle}</p>
@@ -174,7 +174,7 @@ function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor, borde
 // ---------------------------------------------------------------------------
 
 const ACTIVITY_CONFIG = {
-  signup:  { icon: Store,       bg: "#EFF6FF", color: "#2563EB" },
+  signup:  { icon: Store,       bg: "#EFF6FF", color: "#FF4D00" },
   order:   { icon: ShoppingBag, bg: "#F0FDF4", color: "#16A34A" },
   review:  { icon: Star,        bg: "#FFFBEB", color: "#D97706" },
 } as const;
@@ -194,10 +194,10 @@ export default async function SuperAdminOverview() {
 
       {/* ── Greeting ── */}
       <div className="animate-fade-in">
-        <h1 className="text-2xl font-bold" style={{ color: "#0F172A" }}>
+        <h1 className="text-2xl font-bold" style={{ color: "#FAF6ED" }}>
           {greeting}, Platform Admin 👋
         </h1>
-        <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
+        <p className="mt-1 text-sm" style={{ color: "#AD897E" }}>
           Here&apos;s what&apos;s happening across your platform today.
         </p>
       </div>
@@ -213,12 +213,12 @@ export default async function SuperAdminOverview() {
           }}
         >
           <div className="flex items-center gap-3">
-            <AlertCircle className="h-4 w-4 shrink-0" style={{ color: "#2563EB" }} />
+            <AlertCircle className="h-4 w-4 shrink-0" style={{ color: "#FF4D00" }} />
             <p className="text-sm font-medium" style={{ color: "#1E40AF" }}>
               {pendingCount} restaurant application{pendingCount > 1 ? "s" : ""} waiting for your approval
             </p>
           </div>
-          <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold" style={{ color: "#2563EB" }}>
+          <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold" style={{ color: "#FF4D00" }}>
             Review now <ArrowRight className="h-3 w-3" />
           </span>
         </Link>
@@ -232,8 +232,8 @@ export default async function SuperAdminOverview() {
           subtitle={pendingCount > 0 ? `+${pendingCount} pending approval` : "All restaurants operational"}
           icon={Building2}
           iconBg="#EFF6FF"
-          iconColor="#2563EB"
-          borderColor="#2563EB"
+          iconColor="#FF4D00"
+          borderColor="#FF4D00"
           delay={0}
         />
         <StatCard
@@ -275,8 +275,8 @@ export default async function SuperAdminOverview() {
         <div
           className="lg:col-span-2 rounded-xl overflow-hidden animate-fade-in"
           style={{
-            background: "#FFFFFF",
-            border: "1px solid #E2E8F0",
+            background: "#1A1A1A",
+            border: "1px solid #2A2A2A",
             boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
             animationDelay: "240ms",
             animationFillMode: "both",
@@ -284,9 +284,9 @@ export default async function SuperAdminOverview() {
         >
           <div
             className="flex items-center justify-between px-5 py-4"
-            style={{ borderBottom: "1px solid #F1F5F9" }}
+            style={{ borderBottom: "1px solid #201F1F" }}
           >
-            <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>
+            <h2 className="text-sm font-semibold" style={{ color: "#FAF6ED" }}>
               Recent Activity
             </h2>
             <div className="flex items-center gap-4 text-[11px]" style={{ color: "#94A3B8" }}>
@@ -304,7 +304,7 @@ export default async function SuperAdminOverview() {
 
           {activities.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-              <UtensilsCrossed className="h-8 w-8" style={{ color: "#CBD5E1" }} />
+              <UtensilsCrossed className="h-8 w-8" style={{ color: "#2A2A2A" }} />
               <p className="text-sm" style={{ color: "#94A3B8" }}>
                 No activity yet. Place orders or sign up restaurants to see events here.
               </p>
@@ -317,9 +317,9 @@ export default async function SuperAdminOverview() {
                 return (
                   <li
                     key={item.id}
-                    className="flex items-start gap-4 px-5 py-3.5 transition-colors hover:bg-slate-50"
+                    className="flex items-start gap-4 px-5 py-3.5 transition-colors hover:bg-white/5"
                     style={{
-                      borderBottom: idx < activities.length - 1 ? "1px solid #F8FAFC" : "none",
+                      borderBottom: idx < activities.length - 1 ? "1px solid #0A0A0A" : "none",
                     }}
                   >
                     <div
@@ -329,14 +329,14 @@ export default async function SuperAdminOverview() {
                       <Icon className="h-3.5 w-3.5" style={{ color: cfg.color }} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium leading-snug" style={{ color: "#0F172A" }}>
+                      <p className="text-sm font-medium leading-snug" style={{ color: "#FAF6ED" }}>
                         {item.title}
                       </p>
                       <p className="mt-0.5 truncate text-xs" style={{ color: "#94A3B8" }}>
                         {item.meta}
                       </p>
                     </div>
-                    <p className="shrink-0 text-[11px] tabular-nums" style={{ color: "#CBD5E1" }}>
+                    <p className="shrink-0 text-[11px] tabular-nums" style={{ color: "#2A2A2A" }}>
                       {formatTimeAgo(item.timestamp)}
                     </p>
                   </li>
@@ -345,11 +345,11 @@ export default async function SuperAdminOverview() {
             </ul>
           )}
 
-          <div className="px-5 py-3" style={{ borderTop: "1px solid #F1F5F9" }}>
+          <div className="px-5 py-3" style={{ borderTop: "1px solid #201F1F" }}>
             <Link
               href="/super-admin/restaurants"
               className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:opacity-70"
-              style={{ color: "#2563EB" }}
+              style={{ color: "#FF4D00" }}
             >
               View all restaurants <ArrowRight className="h-3 w-3" />
             </Link>
@@ -361,7 +361,7 @@ export default async function SuperAdminOverview() {
           className="flex flex-col gap-2.5 animate-fade-in"
           style={{ animationDelay: "300ms", animationFillMode: "both" }}
         >
-          <h2 className="text-sm font-semibold px-0.5 mb-1" style={{ color: "#0F172A" }}>
+          <h2 className="text-sm font-semibold px-0.5 mb-1" style={{ color: "#FAF6ED" }}>
             Quick Actions
           </h2>
 
@@ -373,7 +373,7 @@ export default async function SuperAdminOverview() {
               icon: Building2,
               badge: 0,
               iconBg: "#EFF6FF",
-              iconColor: "#2563EB",
+              iconColor: "#FF4D00",
             },
             {
               label: "Review Approvals",
@@ -415,10 +415,10 @@ export default async function SuperAdminOverview() {
             <Link
               key={href}
               href={href}
-              className="group flex items-center gap-3 rounded-xl px-4 py-3.5 transition-all hover:shadow-sm hover:border-blue-200 bg-white"
+              className="group flex items-center gap-3 rounded-xl px-4 py-3.5 transition-all hover:shadow-sm hover:border-sa-accent/40 bg-sa-surface"
               style={{
-                border: "1px solid #E2E8F0",
-                boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+                border: "1px solid #2A2A2A",
+                boxShadow: "0 1px 2px rgba(0,0,0,0.3)",
               }}
             >
               <div
@@ -429,7 +429,7 @@ export default async function SuperAdminOverview() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold truncate" style={{ color: "#0F172A" }}>
+                  <p className="text-sm font-semibold truncate" style={{ color: "#FAF6ED" }}>
                     {label}
                   </p>
                   {badge > 0 && (
@@ -445,7 +445,7 @@ export default async function SuperAdminOverview() {
                   {desc}
                 </p>
               </div>
-              <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#2563EB" }} />
+              <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#FF4D00" }} />
             </Link>
           ))}
 

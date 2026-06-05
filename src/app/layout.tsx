@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Montserrat, JetBrains_Mono, Inter } from "next/font/google";
+import { Bebas_Neue, Montserrat, JetBrains_Mono, Inter, Playfair_Display } from "next/font/google";
 import { MotionConfig } from "framer-motion";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getLocale } from "next-intl/server";
@@ -33,6 +33,13 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: {
     default: "ServeMyTable — TAP . ORDER . ENJOY",
@@ -56,7 +63,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#1B2A4A",
+  themeColor: "#0A0A0A",
 };
 
 export default async function RootLayout({
@@ -69,7 +76,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${bebasNeue.variable} ${montserrat.variable} ${jetbrainsMono.variable} ${inter.variable} font-sans antialiased`}>
+      <body className={`${bebasNeue.variable} ${montserrat.variable} ${jetbrainsMono.variable} ${inter.variable} ${playfairDisplay.variable} font-sans antialiased`}>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <MotionConfig reducedMotion="user">
             {children}

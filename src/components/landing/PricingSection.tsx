@@ -43,17 +43,17 @@ const tiers = [
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="py-20 bg-white">
+    <section id="pricing" className="py-20 bg-[#131313]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-14">
           <p className="text-sm font-semibold text-[#C6A34E] uppercase tracking-wider mb-3">
             Pricing
           </p>
-          <h2 className="font-display text-3xl md:text-4xl text-[#1B2A4A] mb-4">
+          <h2 className="font-display text-3xl md:text-4xl text-[#FAF6ED] mb-4">
             Simple, transparent pricing
           </h2>
-          <p className="text-[#8B7355] text-lg">
+          <p className="text-[#AD897E] text-lg">
             No setup fees. No hidden charges. Cancel anytime.
           </p>
         </div>
@@ -71,26 +71,26 @@ export default function PricingSection() {
             >
               {/* Popular badge */}
               {tier.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#C6A34E] text-[#1B2A4A] text-xs font-bold rounded-full whitespace-nowrap">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#C6A34E] text-[#FAF6ED] text-xs font-bold rounded-full whitespace-nowrap">
                   Most Popular
                 </div>
               )}
 
               {/* Tier name + price */}
               <div className="mb-6">
-                <h3 className="font-display text-xl text-[#1B2A4A] mb-2">{tier.name}</h3>
+                <h3 className="font-display text-xl text-[#FAF6ED] mb-2">{tier.name}</h3>
                 <div className="flex items-end gap-1">
-                  <span className="font-display text-4xl font-bold text-[#1B2A4A]">
+                  <span className="font-display text-4xl font-bold text-[#FAF6ED]">
                     ${tier.price}
                   </span>
-                  <span className="text-[#8B7355] pb-1 text-sm">/month</span>
+                  <span className="text-[#AD897E] pb-1 text-sm">/month</span>
                 </div>
               </div>
 
               {/* Limits */}
               <div className="space-y-2 mb-6 pb-6 border-b border-[#E8DFD0]">
                 {tier.limits.map((limit) => (
-                  <div key={limit} className="flex items-center gap-2 text-sm text-[#1B2A4A]">
+                  <div key={limit} className="flex items-center gap-2 text-sm text-[#FAF6ED]">
                     <span className="text-[#C6A34E] font-bold">✓</span>
                     {limit}
                   </div>
@@ -100,7 +100,7 @@ export default function PricingSection() {
               {/* Features */}
               <ul className="space-y-2.5 mb-8">
                 {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-sm text-[#8B7355]">
+                  <li key={feature} className="flex items-start gap-2 text-sm text-[#AD897E]">
                     <span className="text-[#1B8C3A] mt-0.5 shrink-0">✓</span>
                     {feature}
                   </li>
@@ -112,8 +112,8 @@ export default function PricingSection() {
                 href="/auth/signup"
                 className={`block w-full text-center py-3 rounded-xl font-semibold text-sm transition-colors ${
                   tier.popular
-                    ? "bg-[#C6A34E] text-[#1B2A4A] hover:bg-[#A8873A] hover:text-white"
-                    : "border border-[#E8DFD0] text-[#1B2A4A] hover:bg-[#FDFBF7]"
+                    ? "bg-[#C6A34E] text-[#FAF6ED] hover:bg-[#A8873A] hover:text-white"
+                    : "border border-[#E8DFD0] text-[#FAF6ED] hover:bg-[#0A0A0A]"
                 }`}
               >
                 Get Started
@@ -123,7 +123,7 @@ export default function PricingSection() {
         </div>
 
         {/* Trust note */}
-        <p className="text-center text-sm text-[#8B7355] mt-8">
+        <p className="text-center text-sm text-[#AD897E] mt-8">
           All plans include a 14-day free trial. No credit card required.
         </p>
       </div>

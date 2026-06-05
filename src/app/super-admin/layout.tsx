@@ -36,7 +36,7 @@ export default async function SuperAdminLayout({
     .slice(0, 2);
 
   return (
-    <div className="zone-super-admin min-h-screen" style={{ background: "#F8FAFC" }}>
+    <div className="zone-super-admin min-h-screen" style={{ background: "#0A0A0A" }}>
       <SuperAdminSidebar
         pendingCount={pendingCount}
         adminName={session.user.name}
@@ -47,8 +47,8 @@ export default async function SuperAdminLayout({
         <header
           className="sticky top-0 z-20 flex h-[58px] items-center justify-between gap-4 px-6"
           style={{
-            background: "#FFFFFF",
-            borderBottom: "1px solid #E2E8F0",
+            background: "#1A1A1A",
+            borderBottom: "1px solid #2A2A2A",
           }}
         >
           {/* Left */}
@@ -56,7 +56,7 @@ export default async function SuperAdminLayout({
             <div className="lg:hidden w-8 shrink-0" aria-hidden />
             <span
               className="text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "#64748B" }}
+              style={{ color: "#AD897E" }}
             >
               Super Admin
             </span>
@@ -71,8 +71,8 @@ export default async function SuperAdminLayout({
             {/* Notification bell */}
             <a
               href="/super-admin/approvals"
-              className="relative flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-slate-100"
-              style={{ color: "#64748B" }}
+              className="relative flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "#AD897E" }}
               aria-label={
                 pendingCount > 0
                   ? `${pendingCount} pending approval${pendingCount > 1 ? "s" : ""}`
@@ -97,7 +97,7 @@ export default async function SuperAdminLayout({
             {/* Avatar */}
             <div
               className="flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold select-none text-white"
-              style={{ background: "#2563EB" }}
+              style={{ background: "#FF4D00" }}
               title={session.user.name}
             >
               {initials}

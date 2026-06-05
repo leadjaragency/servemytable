@@ -229,7 +229,7 @@ function UploadMenuModal({
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               tab === t
                 ? "bg-ra-accent/15 text-ra-accent"
-                : "text-ra-muted hover:text-ra-text hover:bg-slate-100"
+                : "text-ra-muted hover:text-ra-text hover:bg-white/5"
             }`}
           >
             {t === "paste" ? "✨ Paste Text (AI)" : "📊 CSV Import"}
@@ -973,7 +973,7 @@ function DishModal({
               {otherDishes.map((d) => (
                 <label
                   key={d.id}
-                  className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-slate-100 transition-colors"
+                  className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-white/5 transition-colors"
                 >
                   <input
                     type="checkbox"

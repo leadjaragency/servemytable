@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
    using ra-* Tailwind classes (inputs, labels, selects) auto-renders dark.
 ──────────────────────────────────────────────────────────────────────────── */
 const DARK_VARS: React.CSSProperties = {
-  ["--color-ra-bg" as string]:      "#162035",
-  ["--color-ra-surface" as string]: "#1B2A4A",
+  ["--color-ra-bg" as string]:      "#131313",
+  ["--color-ra-surface" as string]: "#1A1A1A",
   ["--color-ra-border" as string]:  "rgba(198,163,78,0.25)",
-  ["--color-ra-text" as string]:    "#F1F5F9",
-  ["--color-ra-muted" as string]:   "#94A3B8",
-  ["--color-ra-accent" as string]:  "#C6A34E",
+  ["--color-ra-text" as string]:    "#FAF6ED",
+  ["--color-ra-muted" as string]:   "#AD897E",
+  ["--color-ra-accent" as string]:  "#FF4D00",
 };
 
 /* ── Re-export primitives for composable use ───────────────────────────── */
@@ -95,7 +95,7 @@ function ModalHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
   return (
     <div
       className={cn("px-6 pt-6 pb-4 border-b border-[rgba(198,163,78,0.15)]", className)}
-      style={{ background: "linear-gradient(135deg, #1B2A4A 0%, #162035 100%)" }}
+      style={{ background: "linear-gradient(135deg, #1A1A1A 0%, #0E0E0E 100%)" }}
       {...props}
     />
   );
@@ -106,7 +106,7 @@ function ModalTitle({ className, ...props }: Dialog.DialogTitleProps) {
   return (
     <Dialog.Title
       className={cn(
-        "font-display text-2xl font-bold text-white leading-tight pr-8 tracking-wide uppercase",
+        "font-display text-2xl font-bold text-[#FAF6ED] leading-tight pr-8 tracking-tight",
         className
       )}
       {...props}
@@ -118,7 +118,7 @@ function ModalTitle({ className, ...props }: Dialog.DialogTitleProps) {
 function ModalDescription({ className, ...props }: Dialog.DialogDescriptionProps) {
   return (
     <Dialog.Description
-      className={cn("mt-1.5 text-sm font-sans text-slate-400 leading-relaxed", className)}
+      className={cn("mt-1.5 text-sm font-sans text-[#AD897E] leading-relaxed", className)}
       {...props}
     />
   );
@@ -129,7 +129,7 @@ function ModalBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
   return (
     <div
       className={cn("px-6 py-5 font-sans", className)}
-      style={{ background: "#1B2A4A" }}
+      style={{ background: "#131313" }}
       {...props}
     />
   );
@@ -144,7 +144,7 @@ function ModalFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
         "border-t border-[rgba(198,163,78,0.15)]",
         className
       )}
-      style={{ background: "#162035" }}
+      style={{ background: "#0E0E0E" }}
       {...props}
     />
   );

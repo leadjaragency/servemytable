@@ -180,7 +180,7 @@ export default function OrderPage() {
   return (
     <div className="min-h-dvh bg-cu-bg pb-44">
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-cu-border bg-white/95 px-4 py-3 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 border-b border-cu-border bg-[#131313]/95 px-4 py-3 backdrop-blur-sm">
         <h1 className="font-display text-lg font-bold text-cu-text text-center">{t("title")}</h1>
         {restaurant && (
           <p className="text-center text-xs text-cu-text/40 mt-0.5">{restaurant.name}</p>
@@ -190,7 +190,7 @@ export default function OrderPage() {
       <div className="mx-auto max-w-md px-4 pt-5 space-y-4">
         {/* Order items */}
         {orders.map((order) => (
-          <div key={order.id} className="rounded-2xl border border-cu-border bg-white overflow-hidden">
+          <div key={order.id} className="rounded-2xl border border-cu-border bg-cu-surface overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2.5 bg-cu-bg border-b border-cu-border">
               <span className="text-xs font-medium text-cu-text/60">Order #{order.orderNumber}</span>
               <span className={cn(
@@ -228,7 +228,7 @@ export default function OrderPage() {
         ))}
 
         {/* Totals */}
-        <div className="rounded-2xl border border-cu-border bg-white overflow-hidden">
+        <div className="rounded-2xl border border-cu-border bg-cu-surface overflow-hidden">
           <div className="divide-y divide-cu-border/50 px-4">
             <div className="flex justify-between py-3 text-sm">
               <span className="text-cu-text/60">{t("subtotal")}</span>
@@ -260,7 +260,7 @@ export default function OrderPage() {
         </div>
 
         {/* Tip selector */}
-        <div className="rounded-2xl border border-cu-border bg-white p-4">
+        <div className="rounded-2xl border border-cu-border bg-cu-surface p-4">
           <p className="text-sm font-medium text-cu-text mb-3">{t("addTip")}</p>
           <div className="grid grid-cols-4 gap-2">
             {TIP_PRESETS.map((tp) => (
@@ -302,7 +302,7 @@ export default function OrderPage() {
         </div>
 
         {/* Split bill */}
-        <div className="rounded-2xl border border-cu-border bg-white overflow-hidden">
+        <div className="rounded-2xl border border-cu-border bg-cu-surface overflow-hidden">
           <button
             onClick={() => setShowSplit(!showSplit)}
             className="flex w-full items-center justify-between px-4 py-3"
@@ -350,7 +350,7 @@ export default function OrderPage() {
           <button
             onClick={handleCardMachine}
             disabled={cardLoading}
-            className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-cu-accent bg-white py-3.5 text-base font-bold text-cu-accent active:scale-[0.98] transition-transform disabled:opacity-60"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-cu-accent bg-cu-surface py-3.5 text-base font-bold text-cu-accent active:scale-[0.98] transition-transform disabled:opacity-60"
           >
             {cardLoading ? (
               <><Loader2 className="h-5 w-5 animate-spin" />{t("notifying")}</>

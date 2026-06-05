@@ -452,7 +452,7 @@ export function RestaurantsPageClient({ restaurants: initial, tiers }: Props) {
                 "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-all",
                 statusFilter === tab.value
                   ? "bg-sa-accent text-white shadow-sm"
-                  : "text-sa-muted hover:text-sa-text hover:bg-slate-100"
+                  : "text-sa-muted hover:text-sa-text hover:bg-white/5"
               )}
             >
               {tab.label}
@@ -502,7 +502,7 @@ export function RestaurantsPageClient({ restaurants: initial, tiers }: Props) {
                 filtered.map((r) => (
                   <tr
                     key={r.id}
-                    className="hover:bg-slate-50 transition-colors group"
+                    className="hover:bg-white/5 transition-colors group"
                   >
                     {/* Name + cuisine */}
                     <td className="px-4 py-3">
@@ -519,7 +519,7 @@ export function RestaurantsPageClient({ restaurants: initial, tiers }: Props) {
 
                     {/* Slug */}
                     <td className="px-4 py-3">
-                      <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-sa-muted font-mono">
+                      <code className="rounded bg-white/5 px-1.5 py-0.5 text-xs text-sa-muted font-mono">
                         {r.slug}
                       </code>
                     </td>

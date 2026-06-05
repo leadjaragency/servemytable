@@ -436,7 +436,7 @@ function SubscriptionCard({
           </span>
         )}
         {isActive && (
-          <span className="flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-semibold text-amber-400">
+          <span className="flex items-center gap-1 rounded-full bg-amber-500/150/15 px-2.5 py-1 text-[11px] font-semibold text-amber-400">
             <Clock className="h-3 w-3" /> Trial Active
           </span>
         )}

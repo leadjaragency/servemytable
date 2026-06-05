@@ -54,7 +54,7 @@ export default function AboutPage() {
 
       <div className="mx-auto max-w-md px-5 space-y-5">
         {/* Story */}
-        <div className="rounded-2xl border border-cu-border bg-white p-5 space-y-2">
+        <div className="rounded-2xl border border-cu-border bg-cu-surface p-5 space-y-2">
           <div className="flex items-center gap-2">
             <Utensils className="h-4 w-4 text-cu-accent" />
             <h2 className="font-display text-base font-semibold text-cu-text">Our Story</h2>
@@ -69,7 +69,7 @@ export default function AboutPage() {
 
         {/* Hours */}
         {hours && (hours.open || hours.close) && (
-          <div className="rounded-2xl border border-cu-border bg-white p-5">
+          <div className="rounded-2xl border border-cu-border bg-cu-surface p-5">
             <div className="flex items-center gap-2 mb-3">
               <Clock className="h-4 w-4 text-cu-accent" />
               <h2 className="font-display text-base font-semibold text-cu-text">Opening Hours</h2>
@@ -99,7 +99,7 @@ export default function AboutPage() {
 
         {/* Contact */}
         {(restaurant.phone || restaurant.email || restaurant.address) && (
-          <div className="rounded-2xl border border-cu-border bg-white p-5 space-y-3">
+          <div className="rounded-2xl border border-cu-border bg-cu-surface p-5 space-y-3">
             <h2 className="font-display text-base font-semibold text-cu-text">Contact Us</h2>
             {restaurant.phone && (
               <a
@@ -130,7 +130,7 @@ export default function AboutPage() {
 
         {/* AI Waiter profile */}
         {waiter && (
-          <div className="rounded-2xl border border-cu-border bg-white p-5">
+          <div className="rounded-2xl border border-cu-border bg-cu-surface p-5">
             <h2 className="font-display text-base font-semibold text-cu-text mb-3">Your AI Waiter</h2>
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cu-accent/10 text-3xl">
