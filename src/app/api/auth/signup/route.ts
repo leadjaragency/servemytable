@@ -22,6 +22,30 @@ const signupSchema = z.object({
   planInterest:   z.enum(["basic", "standard", "premium"]).optional(),
 });
 
+// Removes a leftover Supabase Auth login for an email that no longer has a
+// Prisma User — e.g. an orphan left behind when a restaurant was permanently
+// purged but the best-effort Supabase delete failed. Returns true if an orphan
+// was found and removed, so signup can retry and treat the email as brand new.
+async function reclaimOrphanedAuthEmail(email: string): Promise<boolean> {
+  const admin  = getSupabaseAdmin();
+  const target = email.toLowerCase();
+  for (let page = 1; page <= 20; page++) {
+    const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 200 });
+    if (error || !data?.users?.length) return false;
+    const match = data.users.find((u) => u.email?.toLowerCase() === target);
+    if (match) {
+      const { error: delErr } = await admin.auth.admin.deleteUser(match.id);
+      if (delErr) {
+        console.error("[signup] failed to delete orphaned auth user:", delErr);
+        return false;
+      }
+      return true;
+    }
+    if (data.users.length < 200) return false; // reached the last page
+  }
+  return false;
+}
+
 // ---------------------------------------------------------------------------
 // POST /api/auth/signup
 // Creates a Supabase Auth user + pending Restaurant + restaurant_owner User.
@@ -66,8 +90,8 @@ export async function POST(req: Request) {
       slug = `${baseSlug}-${attempt}`;
     }
 
-    // Create Supabase Auth user (admin API — bypasses Supabase confirmation email)
-    const { data: sbData, error: sbError } = await getSupabaseAdmin().auth.admin.createUser({
+    // Create Supabase Auth user (admin API — bypasses Supabase confirmation email).
+    const createParams = {
       email: normalizedEmail,
       password,
       email_confirm: true, // mark email as confirmed — we send our own email via Resend
@@ -76,9 +100,21 @@ export async function POST(req: Request) {
         isActive:     false, // activated on super admin approval
         restaurantId: null,  // set after Prisma creates the restaurant
       },
-    });
+    };
 
-    if (sbError || !sbData.user) {
+    let { data: sbData, error: sbError } = await getSupabaseAdmin().auth.admin.createUser(createParams);
+
+    // We already confirmed no Prisma User owns this email, so a Supabase collision
+    // means an orphaned login from a purged restaurant — reclaim it and retry once
+    // so a returning restaurant is treated as a brand-new account.
+    if (sbError || !sbData?.user) {
+      const reclaimed = await reclaimOrphanedAuthEmail(normalizedEmail);
+      if (reclaimed) {
+        ({ data: sbData, error: sbError } = await getSupabaseAdmin().auth.admin.createUser(createParams));
+      }
+    }
+
+    if (sbError || !sbData?.user) {
       console.error("[signup] Supabase createUser error:", sbError);
       return NextResponse.json(
         { error: "Failed to create account. Please try again." },
