@@ -12,6 +12,7 @@ test.describe('Signup', () => {
     await page.fill('input[name="ownerName"]', 'Test Owner');
     await page.fill('input[name="email"]', uniqueEmail);
     await page.fill('input[name="password"]', 'password123');
+    await page.check('input[name="acceptTerms"]'); // required consent
 
     await page.click('button[type="submit"]');
     await expect(page).toHaveURL(/\/auth\/pending/, { timeout: 15_000 });
@@ -25,6 +26,7 @@ test.describe('Signup', () => {
     await page.fill('input[name="ownerName"]', 'Dup Owner');
     await page.fill('input[name="email"]', 'owner@saffronpalace.com'); // already seeded
     await page.fill('input[name="password"]', 'password123');
+    await page.check('input[name="acceptTerms"]'); // required consent
 
     await page.click('button[type="submit"]');
     await expect(page.locator('text=/already|exists|registered/i').first()).toBeVisible({ timeout: 10_000 });

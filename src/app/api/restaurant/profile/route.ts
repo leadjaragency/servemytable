@@ -17,6 +17,8 @@ export async function GET() {
       select: {
         id: true, name: true, slug: true, cuisine: true, tagline: true,
         phone: true, email: true, address: true, hours: true,
+        city: true, province: true, postalCode: true, timezone: true,
+        website: true, branding: true, setupCompletedAt: true,
         taxRate: true, currency: true, logoUrl: true, defaultLanguage: true,
         tier: { select: { name: true, features: true } },
       },
@@ -36,9 +38,17 @@ const UpdateSchema = z.object({
   phone:           z.string().max(30).optional(),
   email:           z.string().email().optional(),
   address:         z.string().max(300).optional(),
+  city:            z.string().max(120).optional(),
+  province:        z.string().max(120).optional(),
+  postalCode:      z.string().max(20).optional(),
+  timezone:        z.string().max(64).optional(),
+  website:         z.string().max(200).optional(),
+  branding:        z.record(z.string(), z.any()).optional(),
   taxRate:         z.number().min(0).max(1).optional(),
+  currency:        z.enum(["CAD", "USD", "EUR"]).optional(),
   hours:           z.object({ open: z.string(), close: z.string() }).optional(),
   defaultLanguage: z.enum(["en", "de", "fr", "es"]).optional(),
+  setupCompletedAt: z.coerce.date().nullable().optional(),
 });
 
 export async function PUT(req: Request) {

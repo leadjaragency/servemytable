@@ -1,5 +1,6 @@
 import { getRequiredSession, getPrismaForSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { AutoRefresh } from "@/components/admin/AutoRefresh";
 import {
@@ -253,6 +254,18 @@ export default async function AdminDashboardPage() {
   if (!session?.user.restaurantId) redirect("/auth/login");
 
   const db = getPrismaForSession(session);
+
+  // First-run nudge: send freshly-approved owners to the setup wizard once,
+  // unless they've chosen to skip it (cookie set by the wizard's "Skip for now").
+  const skippedSetup = (await cookies()).get("smt_setup_skipped")?.value === "1";
+  if (!skippedSetup) {
+    const setupState = await db.restaurant.findUnique({
+      where:  { id: session.user.restaurantId },
+      select: { setupCompletedAt: true },
+    });
+    if (setupState && !setupState.setupCompletedAt) redirect("/admin/setup");
+  }
+
   const t  = await getTranslations("admin.dashboard");
 
   const {

@@ -154,3 +154,55 @@ export const TIER_DEFAULTS = {
   standard: { maxTables: 50,  maxWaiters: 3,  maxTeamMembers: 5,  monthlyPrice: 199 },
   premium:  { maxTables: -1,  maxWaiters: -1, maxTeamMembers: -1, monthlyPrice: 399 },
 } as const;
+
+// ---------------------------------------------------------------------------
+// Onboarding option lists ({ value, label } — compatible with <Select options>)
+// ---------------------------------------------------------------------------
+
+export const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English" },
+  { value: "fr", label: "French" },
+  { value: "de", label: "German" },
+  { value: "es", label: "Spanish" },
+] as const;
+
+export const CURRENCY_OPTIONS = [
+  { value: "CAD", label: "CAD — Canadian Dollar" },
+  { value: "USD", label: "USD — US Dollar" },
+  { value: "EUR", label: "EUR — Euro" },
+] as const;
+
+// Canada-first; a few common others for convenience
+export const TIMEZONE_OPTIONS = [
+  { value: "America/Edmonton",    label: "Mountain — Edmonton / Calgary" },
+  { value: "America/Toronto",     label: "Eastern — Toronto" },
+  { value: "America/Winnipeg",    label: "Central — Winnipeg" },
+  { value: "America/Vancouver",   label: "Pacific — Vancouver" },
+  { value: "America/Halifax",     label: "Atlantic — Halifax" },
+  { value: "America/St_Johns",    label: "Newfoundland — St. John's" },
+  { value: "America/New_York",    label: "US Eastern — New York" },
+  { value: "America/Chicago",     label: "US Central — Chicago" },
+  { value: "America/Los_Angeles", label: "US Pacific — Los Angeles" },
+  { value: "Europe/Berlin",       label: "Central European — Berlin" },
+] as const;
+
+export const REFERRAL_SOURCES = [
+  { value: "google",   label: "Google search" },
+  { value: "referral", label: "Referral from a friend / colleague" },
+  { value: "social",   label: "Social media" },
+  { value: "event",    label: "Industry event" },
+  { value: "other",    label: "Other" },
+] as const;
+
+// label shown to user; value is a representative table count stored in approxTables
+export const TABLE_SIZE_BUCKETS = [
+  { value: 15,  label: "1–15 tables" },
+  { value: 50,  label: "16–50 tables" },
+  { value: 100, label: "50+ tables" },
+] as const;
+
+export const PLAN_INTEREST_OPTIONS = [
+  { value: "basic",    label: "Basic — $99/mo" },
+  { value: "standard", label: "Standard — $199/mo" },
+  { value: "premium",  label: "Premium — $399/mo" },
+] as const;

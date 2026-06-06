@@ -162,6 +162,7 @@ async function main() {
       currency: "USD",
       status: "active",
       isPublicDemo: true,
+      setupCompletedAt: new Date(),   // demo is fully configured — skip onboarding wizard
       tierId: tierStandard.id,
     },
   });

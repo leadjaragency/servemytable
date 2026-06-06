@@ -33,6 +33,11 @@ model Restaurant {
   phone         String?
   email         String?
   address       String?
+  city            String?
+  province        String?           // state / province
+  postalCode      String?
+  timezone        String?
+  website         String?
   hours         Json?
   branding      Json?
   country         String             @default("CA")  // "CA" | "DE"
@@ -40,6 +45,12 @@ model Restaurant {
   taxRate         Float              @default(0.08)
   currency      String             @default("CAD")
   status            String             @default("pending")
+  approxTables      Int?                               // sizing hint captured at signup
+  planInterest      String?                            // "basic" | "standard" | "premium"
+  referralSource    String?                            // "how did you hear about us"
+  marketingOptIn    Boolean            @default(false)
+  termsAcceptedAt   DateTime?
+  setupCompletedAt  DateTime?                          // null until the setup wizard is finished
   isPublicDemo      Boolean            @default(false)  // open, no-login demo restaurant
   kitchenToken      String?            @unique          // capability token for no-login kitchen display
   trialStartsAt     DateTime?

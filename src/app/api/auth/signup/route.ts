@@ -10,11 +10,16 @@ import { generateSlug } from "@/lib/utils";
 const signupSchema = z.object({
   restaurantName: z.string().min(2).max(100),
   cuisine:        z.string().min(2).max(100),
-  phone:          z.string().optional(),
-  address:        z.string().optional(),
+  phone:          z.string().max(30).optional(),
+  city:           z.string().max(120).optional(),
   ownerName:      z.string().min(2).max(100),
   email:          z.string().email(),
   password:       z.string().min(8).max(72),
+  acceptTerms:    z.literal(true),                                  // required consent
+  marketingOptIn: z.boolean().optional(),
+  referralSource: z.string().max(40).optional(),
+  approxTables:   z.coerce.number().int().positive().max(100000).optional(),
+  planInterest:   z.enum(["basic", "standard", "premium"]).optional(),
 });
 
 // ---------------------------------------------------------------------------
@@ -37,7 +42,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const { restaurantName, cuisine, phone, address, ownerName, email, password } = parsed.data;
+    const {
+      restaurantName, cuisine, phone, city, ownerName, email, password,
+      marketingOptIn, referralSource, approxTables, planInterest,
+    } = parsed.data;
     const normalizedEmail = email.toLowerCase().trim();
 
     // Check for duplicate email in Prisma
@@ -84,12 +92,17 @@ export async function POST(req: Request) {
     const { restaurant, user } = await prisma.$transaction(async (tx) => {
       const restaurant = await tx.restaurant.create({
         data: {
-          name:    restaurantName,
+          name:           restaurantName,
           slug,
           cuisine,
-          phone:   phone ?? null,
-          address: address ?? null,
-          status:  "pending",
+          phone:          phone ?? null,
+          city:           city ?? null,
+          status:         "pending",
+          referralSource: referralSource ?? null,
+          approxTables:   approxTables ?? null,
+          planInterest:   planInterest ?? null,
+          marketingOptIn: marketingOptIn ?? false,
+          termsAcceptedAt: new Date(),
         },
       });
 

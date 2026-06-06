@@ -8,6 +8,7 @@ import { z } from "zod";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock, CreditCard, Zap, CheckCircle2 } from "lucide-react";
+import { REFERRAL_SOURCES, TABLE_SIZE_BUCKETS, PLAN_INTEREST_OPTIONS } from "@/lib/constants";
 
 const schema = z.object({
   restaurantName: z.string().min(2, "Restaurant name must be at least 2 characters").max(100),
@@ -16,7 +17,12 @@ const schema = z.object({
   email: z.string().email("Enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters").max(72),
   phone: z.string().optional(),
-  address: z.string().optional(),
+  city: z.string().optional(),
+  approxTables: z.number().int().positive().optional(),
+  planInterest: z.enum(["basic", "standard", "premium"]).optional(),
+  referralSource: z.string().optional(),
+  marketingOptIn: z.boolean().optional(),
+  acceptTerms: z.literal(true, { message: "Please accept the Terms to continue" }),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -227,11 +233,42 @@ export default function SignupPage() {
                       <div>
                         <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#1B2A4A" }}>City <span style={{ color: "#8B7355" }}>(opt.)</span></label>
                         <input
-                          placeholder="New York, NY"
+                          placeholder="Calgary, AB"
                           className="smt-input w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
                           style={{ background: "#FAF6ED", border: "1.5px solid #F0E8D6", color: "#1B2A4A" }}
-                          {...register("address")}
+                          {...register("city")}
                         />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#1B2A4A" }}>Tables <span style={{ color: "#8B7355" }}>(opt.)</span></label>
+                        <select
+                          defaultValue=""
+                          className="smt-input w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                          style={{ background: "#FAF6ED", border: "1.5px solid #F0E8D6", color: "#1B2A4A" }}
+                          {...register("approxTables", { setValueAs: (v) => (v === "" ? undefined : Number(v)) })}
+                        >
+                          <option value="">How many tables?</option>
+                          {TABLE_SIZE_BUCKETS.map((b) => (
+                            <option key={b.value} value={b.value}>{b.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#1B2A4A" }}>Plan interest <span style={{ color: "#8B7355" }}>(opt.)</span></label>
+                        <select
+                          defaultValue=""
+                          className="smt-input w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                          style={{ background: "#FAF6ED", border: "1.5px solid #F0E8D6", color: "#1B2A4A" }}
+                          {...register("planInterest", { setValueAs: (v) => (v === "" ? undefined : v) })}
+                        >
+                          <option value="">Not sure yet</option>
+                          {PLAN_INTEREST_OPTIONS.map((p) => (
+                            <option key={p.value} value={p.value}>{p.label}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -282,7 +319,53 @@ export default function SignupPage() {
                       />
                       {errors.password && <p className="mt-1 text-xs" style={{ color: "#C04525" }}>{errors.password.message}</p>}
                     </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#1B2A4A" }}>How did you hear about us? <span style={{ color: "#8B7355" }}>(opt.)</span></label>
+                      <select
+                        defaultValue=""
+                        className="smt-input w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                        style={{ background: "#FAF6ED", border: "1.5px solid #F0E8D6", color: "#1B2A4A" }}
+                        {...register("referralSource", { setValueAs: (v) => (v === "" ? undefined : v) })}
+                      >
+                        <option value="">Choose one…</option>
+                        {REFERRAL_SOURCES.map((r) => (
+                          <option key={r.value} value={r.value}>{r.label}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
+                </div>
+
+                {/* Consent */}
+                <div className="space-y-3">
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded"
+                      style={{ accentColor: "#C6A34E" }}
+                      {...register("acceptTerms")}
+                    />
+                    <span className="text-xs leading-snug" style={{ color: "#8B7355" }}>
+                      I agree to the{" "}
+                      <span className="font-semibold" style={{ color: "#1B2A4A" }}>Terms of Service</span>
+                      {" "}and{" "}
+                      <span className="font-semibold" style={{ color: "#1B2A4A" }}>Privacy Policy</span>.
+                    </span>
+                  </label>
+                  {errors.acceptTerms && <p className="text-xs" style={{ color: "#C04525" }}>{errors.acceptTerms.message}</p>}
+
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded"
+                      style={{ accentColor: "#C6A34E" }}
+                      {...register("marketingOptIn")}
+                    />
+                    <span className="text-xs leading-snug" style={{ color: "#8B7355" }}>
+                      Send me product updates, tips, and occasional offers.
+                    </span>
+                  </label>
                 </div>
 
                 {/* Server error */}
@@ -331,10 +414,7 @@ export default function SignupPage() {
 
             {/* Footer note */}
             <p className="mt-5 text-center text-xs leading-relaxed" style={{ color: "#8B7355" }}>
-              By signing up you agree to our{" "}
-              <span className="font-medium" style={{ color: "#1B2A4A" }}>Terms of Service</span>
-              {" "}and{" "}
-              <span className="font-medium" style={{ color: "#1B2A4A" }}>Privacy Policy</span>
+              We&apos;ll review your application and get back to you within 24 hours.
             </p>
           </div>
         </div>

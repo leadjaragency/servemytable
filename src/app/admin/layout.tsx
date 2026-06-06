@@ -2,6 +2,7 @@ import { getRequiredSession, getPrismaForSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { NotificationBell } from "@/components/admin/NotificationBell";
+import SetupBanner from "@/components/admin/SetupBanner";
 import { LanguageSelector } from "@/components/admin/LanguageSelector";
 import { Wifi, WifiOff } from "lucide-react";
 import { Toaster } from "sonner";
@@ -50,6 +51,7 @@ export default async function AdminLayout({
       defaultLanguage: true,
       logoUrl: true,
       isPublicDemo: true,
+      setupCompletedAt: true,
       _count: {
         select: {
           orders: { where: { status: { in: ["received", "preparing"] } } },
@@ -164,6 +166,9 @@ export default async function AdminLayout({
             />
           </div>
         </header>
+
+        {/* Setup reminder (until the wizard is finished) */}
+        {!restaurant.setupCompletedAt && <SetupBanner />}
 
         {/* Page content */}
         <main className="flex-1 overflow-auto">{children}</main>
