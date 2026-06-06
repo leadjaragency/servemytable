@@ -115,11 +115,80 @@ function splitCSVRow(row: string): string[] {
   return result;
 }
 
+// Parse a price cell tolerant of currency symbols, words, and thousands/decimal
+// separators ("$18.99", "18,99", "1,299.00", "Rs. 250"). Returns NaN when the
+// cell has no usable number, so callers can flag the row instead of coercing to 0.
+function parsePrice(raw: string): number {
+  if (!raw) return NaN;
+  // Keep only digits/separators, then drop stray separators that aren't part of
+  // the number (e.g. the "." in "Rs. 250" or "No.5").
+  let s = raw.replace(/[^0-9.,]/g, "").replace(/^[.,]+/, "").replace(/[.,]+$/, "");
+  if (!s) return NaN;
+  const hasDot = s.includes(".");
+  const hasComma = s.includes(",");
+  if (hasDot && hasComma) {
+    // Whichever separator appears last is the decimal point.
+    if (s.lastIndexOf(",") > s.lastIndexOf(".")) {
+      s = s.replace(/\./g, "").replace(",", ".");     // e.g. 1.299,00 → 1299.00
+    } else {
+      s = s.replace(/,/g, "");                         // e.g. 1,299.00 → 1299.00
+    }
+  } else if (hasComma) {
+    const parts = s.split(",");
+    if (parts.length === 2 && parts[1].length <= 2) {
+      s = parts[0] + "." + parts[1];                  // decimal comma, e.g. 18,99
+    } else {
+      s = s.replace(/,/g, "");                         // thousands, e.g. 1,299
+    }
+  }
+  const n = parseFloat(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+// Accepts common truthy spellings, not just the exact lowercase "true".
+function parseBool(raw: string): boolean {
+  return /^(true|yes|y|1|x|✓)$/i.test(raw.trim());
+}
+
+// Map common header spellings to the canonical column names the parser expects.
+const HEADER_ALIASES: Record<string, string> = {
+  "item": "name", "item name": "name", "dish": "name", "dish name": "name", "title": "name", "product": "name",
+  "desc": "description", "details": "description",
+  "cost": "price", "amount": "price", "rate": "price", "price ($)": "price", "price (cad)": "price", "mrp": "price",
+  "section": "category", "menu category": "category", "menu section": "category", "type": "category", "course": "category",
+  "spice": "spice_level", "spice level": "spice_level", "heat": "spice_level",
+  "vegetarian": "is_veg", "veg": "is_veg",
+  "vegan": "is_vegan",
+  "gluten free": "is_gluten_free", "gluten-free": "is_gluten_free", "gf": "is_gluten_free",
+  "prep": "prep_time", "prep time": "prep_time", "time": "prep_time",
+  "allergen": "allergens", "allergies": "allergens",
+};
+
+function normalizeHeader(h: string): string {
+  const key = h.toLowerCase().trim().replace(/\s+/g, " ");
+  return HEADER_ALIASES[key] ?? key.replace(/\s+/g, "_");
+}
+
 function parseMenuCSV(text: string): ExtractedDish[] {
-  const lines = text.trim().split(/\r?\n/);
+  const lines = text.replace(/^﻿/, "").trim().split(/\r?\n/); // strip BOM
   if (lines.length < 2) return [];
-  const headers = splitCSVRow(lines[0]).map(h => h.toLowerCase().trim());
-  const get = (vals: string[], col: string) => vals[headers.indexOf(col)] ?? "";
+  const headers = splitCSVRow(lines[0]).map(normalizeHeader);
+
+  // Require the columns we cannot sensibly default. Throw a clear message the
+  // upload UI surfaces, instead of silently returning an empty/invalid result.
+  const missing = ["name", "price"].filter((c) => !headers.includes(c));
+  if (missing.length) {
+    throw new Error(
+      `Your CSV is missing required column${missing.length > 1 ? "s" : ""}: ${missing.join(", ")}. ` +
+      `Download the template to see the expected headers.`
+    );
+  }
+
+  const get = (vals: string[], col: string) => {
+    const i = headers.indexOf(col);
+    return i === -1 ? "" : (vals[i] ?? "");
+  };
+
   return lines.slice(1)
     .filter(l => l.trim())
     .map(line => {
@@ -128,13 +197,13 @@ function parseMenuCSV(text: string): ExtractedDish[] {
       return {
         name:        get(v, "name").slice(0, 100),
         description: get(v, "description").slice(0, 500),
-        price:       Math.max(0, parseFloat(get(v, "price")) || 0),
+        price:       parsePrice(get(v, "price")),
         category:    get(v, "category") || "General",
-        allergens:   allergenRaw ? allergenRaw.split(",").map(s => s.trim()).filter(Boolean) : [],
+        allergens:   allergenRaw ? allergenRaw.split(/[;,|]/).map(s => s.trim()).filter(Boolean) : [],
         spiceLevel:  Math.min(5, Math.max(0, parseInt(get(v, "spice_level")) || 0)),
-        isVeg:       get(v, "is_veg") === "true",
-        isVegan:     get(v, "is_vegan") === "true",
-        isGlutenFree: get(v, "is_gluten_free") === "true",
+        isVeg:       parseBool(get(v, "is_veg")),
+        isVegan:     parseBool(get(v, "is_vegan")),
+        isGlutenFree: parseBool(get(v, "is_gluten_free")),
         prepTime:    Math.max(1, parseInt(get(v, "prep_time")) || 15),
       };
     })
@@ -337,23 +406,31 @@ function ParsePreviewModal({
 }) {
   const router = useRouter();
 
-  // Each extracted dish gets a selected flag + a mapped categoryId
+  // Each extracted dish gets a selected flag + a mapped categoryId.
+  // Rows that can't pass the dish API (no name / no valid price) are flagged and
+  // auto-deselected so they don't fail silently on import.
   const [rows, setRows] = useState(() =>
     extracted.map((d) => {
       // Auto-match category name (case-insensitive) to existing categories
       const matched = categories.find(
         (c) => c.name.toLowerCase() === d.category.toLowerCase()
       );
+      const invalidReason =
+        !d.name?.trim()      ? "Missing name"
+        : !(d.price > 0)     ? "Missing or invalid price"
+        : null;
       return {
         ...d,
-        selected:   true,
-        categoryId: matched?.id ?? (categories[0]?.id ?? ""),
+        selected:     invalidReason === null,
+        categoryId:   matched?.id ?? (categories[0]?.id ?? ""),
+        invalidReason,
       };
     })
   );
   const [importing, setImporting] = useState(false);
   const [progress,  setProgress]  = useState<{ done: number; total: number } | null>(null);
   const [error,     setError]     = useState<string | null>(null);
+  const [results,   setResults]   = useState<{ imported: number; failures: { name: string; reason: string }[] } | null>(null);
 
   function toggleRow(i: number) {
     setRows((prev) => prev.map((r, idx) => idx === i ? { ...r, selected: !r.selected } : r));
@@ -396,6 +473,9 @@ function ParsePreviewModal({
     setProgress({ done: 0, total: selected.length });
 
     let done = 0;
+    let imported = 0;
+    const failures: { name: string; reason: string }[] = [];
+
     for (const row of selected) {
       // Prefer newly created category, then existing match, then dropdown selection
       const categoryId =
@@ -404,12 +484,12 @@ function ParsePreviewModal({
         row.categoryId;
 
       try {
-        await fetch("/api/menu", {
+        const res = await fetch("/api/menu", {
           method:  "POST",
           headers: { "Content-Type": "application/json" },
           body:    JSON.stringify({
             name:        row.name,
-            description: row.description,
+            description: row.description?.trim() || row.name, // fall back so a blank desc never blocks import
             price:       row.price,
             categoryId,
             allergens:   row.allergens,
@@ -425,15 +505,32 @@ function ParsePreviewModal({
             upsellIds:   [],
           }),
         });
+        if (res.ok) {
+          imported++;
+        } else {
+          const body = await res.json().catch(() => ({}));
+          failures.push({ name: row.name, reason: (body as { error?: string }).error ?? `Failed (${res.status})` });
+        }
       } catch {
-        // continue on individual errors
+        failures.push({ name: row.name, reason: "Network error" });
       }
       done++;
       setProgress({ done, total: selected.length });
     }
 
     router.refresh();
-    onClose();
+    setImporting(false);
+    setProgress(null);
+
+    if (failures.length === 0) {
+      onClose();
+    } else {
+      // Keep the modal open, show what imported vs not, and leave only the
+      // failed rows selected so a re-import retries them without duplicating.
+      const failedNames = new Set(failures.map((f) => f.name));
+      setRows((prev) => prev.map((r) => ({ ...r, selected: r.selected && failedNames.has(r.name) })));
+      setResults({ imported, failures });
+    }
   }
 
   const selectedCount = rows.filter((r) => r.selected).length;
@@ -466,7 +563,7 @@ function ParsePreviewModal({
             {error && <span className="ml-2 text-red-400">{error}</span>}
           </div>
           <div className="flex gap-3">
-            <Button variant="ghost" size="sm" onClick={onClose} disabled={importing}>Cancel</Button>
+            <Button variant="ghost" size="sm" onClick={onClose} disabled={importing}>{results ? "Close" : "Cancel"}</Button>
             <Button
               variant="amber"
               size="sm"
@@ -480,6 +577,26 @@ function ParsePreviewModal({
         </div>
       }
     >
+      {results && (
+        <div className="mb-3 rounded-xl border border-ra-border bg-ra-bg p-3">
+          <p className="text-sm font-medium text-ra-text">
+            Imported {results.imported} of {results.imported + results.failures.length} dish
+            {results.imported + results.failures.length !== 1 ? "es" : ""}.
+            {results.failures.length > 0 && ` ${results.failures.length} skipped:`}
+          </p>
+          {results.failures.length > 0 && (
+            <ul className="mt-1.5 max-h-32 space-y-0.5 overflow-auto text-xs text-red-400">
+              {results.failures.map((f, i) => (
+                <li key={i}>• {f.name || "(unnamed)"} — {f.reason}</li>
+              ))}
+            </ul>
+          )}
+          <p className="mt-2 text-xs text-ra-muted">
+            Fix the flagged rows in your CSV and re-import, or close to keep what imported.
+          </p>
+        </div>
+      )}
+
       <div className="overflow-auto max-h-[60vh]">
         <table className="w-full text-sm">
           <thead className="sticky top-0 bg-ra-surface">
@@ -534,7 +651,13 @@ function ParsePreviewModal({
                   )}
                 </td>
                 <td className="px-3 py-2.5 text-right font-mono text-ra-text">
-                  ${row.price.toFixed(2)}
+                  {row.invalidReason ? (
+                    <span className="font-sans text-[10px] font-medium text-red-400" title={row.invalidReason}>
+                      ⚠ {row.invalidReason}
+                    </span>
+                  ) : (
+                    `$${row.price.toFixed(2)}`
+                  )}
                 </td>
                 <td className="px-3 py-2.5 text-center text-xs text-ra-muted space-x-1">
                   {row.isVeg    && <span title="Vegetarian">🌱</span>}
