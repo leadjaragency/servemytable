@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import { prisma } from "@/lib/db";
 import { getSupabaseAdmin } from "@/lib/supabase-server";
+import { sendApprovalEmail } from "@/lib/email";
 
 // ---------------------------------------------------------------------------
 // Schema
@@ -109,7 +110,7 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
       include: {
         users: {
           where: { supabaseUserId: { not: null } },
-          select: { supabaseUserId: true, role: true },
+          select: { supabaseUserId: true, role: true, email: true, name: true },
         },
       },
     });
@@ -117,6 +118,17 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
     if (!restaurant) {
       return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
     }
+
+    // Detect a genuine approval: a transition INTO "active" from any other status.
+    // When this happens via the detail page (not the Approvals page), we must
+    // still start the trial clock and send the approval email — otherwise the
+    // owner is activated silently and never notified.
+    const activating   = status === "active" && restaurant.status !== "active";
+    const startTrialNow = activating && !restaurant.trialStartsAt;
+    const now           = new Date();
+    const computedTrialEndsAt = startTrialNow
+      ? new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000) // +14 days
+      : null;
 
     await prisma.$transaction(async (tx) => {
       await tx.restaurant.update({
@@ -126,6 +138,7 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
           ...(status !== undefined ? { status } : {}),
           ...(tierId !== undefined ? { tierId } : {}),
           ...(trialEndsAt !== undefined ? { trialEndsAt: trialEndsAt ? new Date(trialEndsAt) : null } : {}),
+          ...(startTrialNow ? { trialStartsAt: now, trialEndsAt: computedTrialEndsAt } : {}),
         },
       });
 
@@ -157,6 +170,42 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
             })
           )
       );
+    }
+
+    // On approval (transition into active): start the trial in Supabase metadata
+    // and email the owner(s) their approval — mirrors /api/auth/approve so that
+    // approving from the detail page notifies the owner just the same.
+    if (activating) {
+      const effectiveTrialEndsAt =
+        computedTrialEndsAt ??
+        (trialEndsAt ? new Date(trialEndsAt) : restaurant.trialEndsAt ?? null);
+
+      const supabaseAdmin = getSupabaseAdmin();
+      for (const u of restaurant.users) {
+        if (u.role !== "restaurant_owner" || !u.supabaseUserId) continue;
+
+        await supabaseAdmin.auth.admin.updateUserById(u.supabaseUserId, {
+          user_metadata: {
+            role:           "restaurant_owner",
+            isActive:       true,
+            restaurantId:   id,
+            restaurantSlug: restaurant.slug,
+            ...(effectiveTrialEndsAt ? { trialEndsAt: effectiveTrialEndsAt.toISOString() } : {}),
+          },
+        });
+
+        if (effectiveTrialEndsAt) {
+          // fire-and-forget — a failed email must not fail the approval
+          sendApprovalEmail({
+            to:             u.email,
+            ownerName:      u.name,
+            restaurantName: restaurant.name,
+            trialEndsAt:    effectiveTrialEndsAt,
+          }).catch((err) =>
+            console.error("[restaurant PUT] approval email failed:", err)
+          );
+        }
+      }
     }
 
     return NextResponse.json({ message: "Updated successfully" });
